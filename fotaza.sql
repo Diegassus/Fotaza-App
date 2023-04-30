@@ -38,10 +38,6 @@ CREATE TABLE `categories` (
 -- Volcado de datos para la tabla `categories`
 --
 
-INSERT INTO `categories` (`id`, `name`, `createdAt`, `updatedAt`) VALUES
-(1, 'DEPORTES', '2023-04-25 00:47:38', '2023-04-25 00:47:38'),
-(2, 'KAYAK', '2023-04-29 17:32:44', '2023-04-29 17:32:44'),
-(3, 'TIRO AL BLANCO', '2023-04-29 17:33:13', '2023-04-29 17:33:13');
 
 -- --------------------------------------------------------
 
@@ -100,12 +96,6 @@ CREATE TABLE `images` (
 -- Volcado de datos para la tabla `images`
 --
 
-INSERT INTO `images` (`id`, `resolution`, `title`, `description`, `type`, `format`, `watermartk`, `tags`, `src`, `status`, `stars`, `createdAt`, `updatedAt`, `UserId`, `CategoryId`, `RightId`) VALUES
-(1, '1191x685', 'Primer post', 'Una foto de cuando hice el login', '1', 'png', 'Mi primera watermark', '', '76a969e0-4b75-40c4-a272-68e713d9ba58.png', 1, 0, '2023-04-30 00:45:01', '2023-04-30 00:45:01', 3, 1, 1),
-(2, '1026x514', 'Segundo posteo', 'Esta es una foto del diagrama de ER de net', '1', 'png', 'Fotaza', '#Programacion#Node.js', 'ab29be8a-0af0-4169-8624-26e2b5f0c0b6.png', 1, 0, '2023-04-30 00:50:42', '2023-04-30 00:50:42', 3, 3, 1),
-(3, '200x200', 'Tercer post', 'Una foto de perfil cualquiera', '0', 'jpg', 'Fotaza', '', '578f7b3a-f82f-46dc-a4fd-9400a318737a.jpg', 1, 0, '2023-04-30 00:51:58', '2023-04-30 00:51:58', 3, 3, 1),
-(4, '225x225', 'Cuarto Post', 'Una foto random', '0', 'png', 'Fotaza', '', '52d92d8a-3973-41e9-94c0-952f0dc2be59.png', 1, 0, '2023-04-30 02:13:24', '2023-04-30 02:13:24', 3, 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -144,9 +134,6 @@ CREATE TABLE `profiles` (
 -- Volcado de datos para la tabla `profiles`
 --
 
-INSERT INTO `profiles` (`id`, `likes`, `lastname`, `birth`, `imageSrc`, `portrait`, `status`, `createdAt`, `updatedAt`, `UserId`) VALUES
-(3, 'Comer papitas', 'Carlos Amendola', '2023-04-28 00:00:00', '4d231acc-e7c6-4139-86eb-ddefe642467e.jpg', 'b83f68ec-b9a1-4aa9-934c-e623844c6b4a.png', 1, '2023-04-25 00:47:38', '2023-04-27 19:30:40', 3),
-(4, 'Programar feo', 'Carlitos Tevez', '2023-04-28 00:00:00', '7bb4da3b-bd73-43a3-8cad-d9214f2c74c1.jpg', '35062823-0707-4de1-a381-4175d9edbad2.png', 1, '2023-04-27 13:24:29', '2023-04-27 13:25:34', 4);
 
 -- --------------------------------------------------------
 
@@ -164,12 +151,6 @@ CREATE TABLE `rights` (
 --
 -- Volcado de datos para la tabla `rights`
 --
-
-INSERT INTO `rights` (`id`, `name`, `createdAt`, `updatedAt`) VALUES
-(1, 'Ningun Derecho', '2023-04-29 17:46:29', '2023-04-29 17:46:29'),
-(2, 'Copyleft © 🄯', '2023-04-29 17:47:04', '2023-04-29 17:47:04'),
-(3, 'Creative Commons (CC)', '2023-04-29 17:52:14', '2023-04-29 17:52:14'),
-(4, 'CopyRight ©', '2023-04-30 02:38:38', '2023-04-30 02:38:38');
 
 -- --------------------------------------------------------
 
@@ -191,10 +172,6 @@ CREATE TABLE `users` (
 --
 -- Volcado de datos para la tabla `users`
 --
-
-INSERT INTO `users` (`id`, `email`, `username`, `password`, `status`, `createdAt`, `updatedAt`, `ProfileId`) VALUES
-(3, 'test1@gmail.com', 'Diegassus', '$2b$10$N5X2.YvnIh/PImaJscOsmera6c1EbOX2AirIPbFwMU.4lldlbcqsS', 1, '2023-04-25 00:47:38', '2023-04-25 00:47:38', 3),
-(4, 'test2@gmail.com', 'pepito', '$2b$10$XMaDXf8M.3FOtv4qb2LJguZW4CBMJOeD3q4onnOS6bkDgX08GDH4i', 1, '2023-04-27 13:24:29', '2023-04-27 13:24:29', 4);
 
 --
 -- Índices para tablas volcadas
