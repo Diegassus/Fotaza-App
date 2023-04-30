@@ -5,8 +5,15 @@ const server = new Server();
 
 server.listen();
 
-// acceder a vista de personalizacion
+// PERFIL
+// Comprobar detalle de validaciones en cliente y servidor para actualizar perfil.
+// controlar formulario
+// controlar la ruta y los datos que llegan en los middlewares
+// cargar los posteos de esa persona en el perfil y si es el usuario, lo actualiza al igual que su perfil
+
+//POSTEO
 // permitir crear un post y hacer fetch de un post (para cargarlos al index) publico y privado
+// despues revisar sistema de busqueda mediante categorias y etiquetado (x ahora cargar cualquier posteo)
 
 /*
 Se necesita implementar una aplicación web que permita almacenar, ordenar, buscar, vender y
@@ -35,11 +42,7 @@ La publicación de una imagen deberá tener una imagen (Obligatoria), un título
 categoría (Obligatoria), fecha de creación, formato, resolución, derechos de uso (Obligatorio) y
 etiquetas (Máximo 3 etiquetas).
 
-La categoría debe ser una de las ya disponibles en el sitio (No debe implementarse la gestión de
-las categorías).
-
-Los derechos de uso pueden ser (licencias copyleft, copyrigth, etc). Se deberá realizar un
-relevamiento sobre los distintos tipos de derechos de autor.
+Se deberá realizar un relevamiento sobre los distintos tipos de derechos de autor.
 
 Toda imagen con derecho de copyrigth deben ser publicadas como privadas.
 Las etiquetas son palabras claves que pueden agregarse a la publicación para favorecer la

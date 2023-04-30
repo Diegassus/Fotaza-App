@@ -1,9 +1,15 @@
 const User = require('./user');
 const Auth = require('./auht');
+const Profile = require('./profile');
+const Upload = require('./uploads');
+const Image = require('./image');
 
 
 
 module.exports = {
     ...User,
-    ...Auth
+    ...Auth,
+    ...Profile,
+    ...Upload,
+    ...Image
 }

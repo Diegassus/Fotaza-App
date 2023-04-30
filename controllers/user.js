@@ -5,9 +5,8 @@ const { User, Profile } = require('../models');
 
 
 const createUser = async ( req , res = response ) => {
-
+    console.log("llego")
     const {email,username,password} = req.body ;
-    
     const pass = crypt(password);
     const user = await User.create({username,email,password:pass});
     const profile = await Profile.create();

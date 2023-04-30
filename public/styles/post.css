@@ -1,0 +1,39 @@
+body{
+    background-color: #1f1d1c;
+    color:#e6e6e6;
+}
+
+.container{
+    background-color: #363331;
+    box-shadow: 0 14px 28px rgba(255, 254, 254, 0.25),0 10px 10px rgba(156, 84, 2, 0.22);
+    padding: 15px 15px 25px 15px;
+    border-radius: 10px;
+}
+
+textarea{
+    resize: none;
+}
+
+#subir{
+    border: 1px solid #ec7336;
+  background: #ec7336;
+  color: #1f1d1c;
+}
+
+input{
+    background-color:#e6e6e6;
+    padding: 6px;
+    border-radius: 8px;
+    border: 2px solid #363331;
+    outline: 3px solid #e6e6e6;
+}
+
+#tags{
+    background-color: #363331;
+    border: none;
+    border-bottom: 1px solid #ec7336;
+    color: #ec7336;
+    font-weight: bold;
+    outline: none;
+    border-radius: 0%;
+}

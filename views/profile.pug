@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", href="/styles/vista.css")
+        title Perfil de usuario
+        
+    body 
+        div.container
+            div.header(style=`background-image: url('http://localhost:8080/uploads/portrait/${profile.portrait}/${profile.id}'); repeat: no-repeat; background-size: cover;`)
+                img(src=`/uploads/imageSrc/${user.imageSrc}/${user.id}`).avatar
+                h1.username #{profile.lastname}
+            div.about 
+                p Nacimiento: #{profile.birth}
+                p #{profile.likes}
+
+            if(user.id == profile.id)
+                a(href=`http://localhost:8080/profile/edit/${user.id}`) Editar perfil 

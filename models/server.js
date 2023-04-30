@@ -1,5 +1,7 @@
 const express = require('express');
+const mime = require('mime-types');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 const sequelize = require('../db/config');
 
 
@@ -10,7 +12,12 @@ class Server {
         this.port = process.env.PORT || 8080 ;
         this.paths = {
             user:'/user',
-            auth:'/auth'
+            auth:'/auth',
+            profile:'/profile',
+            image:'/image',
+            upload:'/uploads',
+            category:'/category',
+            rights:'/rights'
         } 
 
         // conectar a la base de datos con sequelize
@@ -33,14 +40,29 @@ class Server {
 
     middlewares(){
         this.app.use(express.json());
-        this.app.use(express.static('public'));
+        this.app.use(express.static('public',{
+            setHeaders: (res,path)=>{
+                const contentType = mime.lookup(path);
+                if(contentType){
+                    res.setHeader('Content-Type',contentType);
+                }
+            }
+        }));
         this.app.use(cors());
+        this.app.use(fileUpload({
+            useTempFiles:true,
+            tempFileDir:'/tmp/'
+        }))
     }
 
     routes(){
-         // crear un controlador que me permita obtener del token enviado po el auth, el usuario y mandarlo a renderizar en la vista del index
         this.app.use(this.paths.user, require('../routes/user'));
         this.app.use(this.paths.auth, require('../routes/auth'));
+        this.app.use(this.paths.profile,require('../routes/profile'));
+        this.app.use(this.paths.image,require('../routes/image'));
+        this.app.use(this.paths.upload,require('../routes/uploads'));
+        this.app.use(this.paths.category,require('../routes/category'));
+        this.app.use(this.paths.rights,require('../routes/rights'));
     }
 
     async connectDB(){

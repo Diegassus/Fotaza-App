@@ -27,7 +27,6 @@ const jwtValidator = async ( req, res = response, next) => {
                 msg:'El usuario con el que se quiere proceder, fue eliminado'
             });
         }
-
         req.user = user ;
         req.uid = id ;
 

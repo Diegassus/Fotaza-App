@@ -33,5 +33,7 @@ module.exports = {
     Server,
     User,
     Profile,
-    Image
+    Image,
+    Right,
+    Category
 }

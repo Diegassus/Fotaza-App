@@ -1,0 +1,54 @@
+html{
+    background-color: #1f1d1c;
+}
+
+body{
+    width: 62%;
+    margin: 30px auto;
+    
+}
+
+.container{
+    background-color: #363331;
+    box-shadow: 0 14px 28px rgba(255, 254, 254, 0.25),0 10px 10px rgba(156, 84, 2, 0.22);
+    padding: 15px 15px 25px 15px;
+    border-radius: 10px;
+}
+
+.header{
+    text-align: center;
+    height: 300px;
+    padding: 12px;
+    color:#e6e6e6;
+}
+
+.avatar{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.username{
+    font-size: 18px;
+    margin: 14px 0 0 0;
+}
+
+a{
+    text-decoration: none;
+    color: #363331;
+    background-color: #ec7336;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.about{
+    padding: 10px;
+}
+.about h3{
+    color: #e6e6e6;
+    font-weight: bold;
+    font-size: 16px;
+}
+.about p{
+    color : #e6e6e6;
+}
