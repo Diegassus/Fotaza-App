@@ -5,7 +5,11 @@ html{
 body{
     width: 62%;
     margin: 30px auto;
-    
+    background-color: #363331;
+}
+
+main{
+    color:#e6e6e6;
 }
 
 .container{

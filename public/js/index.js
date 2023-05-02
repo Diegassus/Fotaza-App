@@ -47,10 +47,8 @@ const cargarNormal=()=>{
 
     fetch('http://localhost:8080/image').then(resp => resp.json()).then(data => {
         const {response} = data;
-        console.log(response)
         const tabla = document.getElementById('load');
-        let div = document.createElement('div');
-        div.setAttribute('class','mt-4');
+        let tml;
         const options = {
             init(img) {
               img.crossOrigin = 'anonymous'
@@ -60,18 +58,27 @@ const cargarNormal=()=>{
             watermark([`http://localhost:8080/uploads/image/${element.src}`],options)
             .image(watermark.text.lowerRight(`${element.watermartk}`,'#ffffff', 0.5))
             .then(function (img) {
-                div.innerHTML = `
-                <h4>${element.title}</h4>
-                <div class="container publicacion mt-1 mb-2 contFoto">
-                    <img src="${img.src}" class="w-100 h-auto">
-                </div>
-                <span>${element.stars}</span>
-                <p>${element.description}</p>
-                <p>${element.tags}</p>
+                tml = `
+                <div class="mt-4">
+                    <h4>${element.title}</h4>
+                    <div class="container publicacion mt-1 mb-2 contFoto">
+                        <img src="${img.src}" class="w-100 h-auto">
+                    </div>
+                    <div class="stars">
+                        <i class="far fa-star" data-value="1"></i>
+                        <i class="far fa-star" data-value="2"></i>
+                        <i class="far fa-star" data-value="3"></i>
+                        <i class="far fa-star" data-value="4"></i>
+                        <i class="far fa-star" data-value="5"></i>
+                        <span>${element.stars}</span>
+                    </div>
+                    <p>${element.description}</p>
+                    <p>${element.tags}</p>
 
-                <hr>
-                `;
-                tabla.appendChild(div);
+                    <hr>
+                </div>
+                `;;
+                tabla.innerHTML+=(tml);
             });
         });
     });
@@ -103,7 +110,8 @@ const cargarBarraUsuario = (usuario)=>{
               ${usuario.username}
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
-              <li><a class="dropdown-item text-dark" href='http://localhost:8080/profile/${usuario.id}'>Mi Perfil</a></li>
+              <li><form action=""></form>
+              <a class="dropdown-item text-dark" href='http://localhost:8080/profile/${usuario.id}'>Mi Perfil</a></li>
               <li><button id="cerrar" class="dropdown-item">Cerrar Sesion</button></li>
             </ul>
           </div>
@@ -124,7 +132,6 @@ const cargarBarraUsuario = (usuario)=>{
         headers: {'Authorization' : localStorage.getItem('Authorization')}
     }).then(resp => resp.json()).then(data => {
         const {response} = data;
-        console.log(response)
         const tabla = document.getElementById('load');
         const options = {
             init(img) {
@@ -139,10 +146,19 @@ const cargarBarraUsuario = (usuario)=>{
                 tml = `
                 <div class="mt-4">
                     <h4>${element.title}</h4>
+                    <span><a href="http://localhost:8080/profile/${element.UserId}">Visitar creador</a></span>
                     <div class="container publicacion mt-1 mb-2 contFoto">
                         <img src="${img.src}" class="w-100 h-auto">
                     </div>
-                    <span>${element.stars}</span>
+                    <div class="stars">
+                        <i class="far fa-star" data-value="1"></i>
+                        <i class="far fa-star" data-value="2"></i>
+                        <i class="far fa-star" data-value="3"></i>
+                        <i class="far fa-star" data-value="4"></i>
+                        <i class="far fa-star" data-value="5"></i>
+                        <span>${element.stars}</span>
+                    </div>      
+                    
                     <p>${element.description}</p>
                     <p>${element.tags}</p>
 
@@ -157,3 +173,4 @@ const cargarBarraUsuario = (usuario)=>{
 
 
 main();
+

@@ -56,9 +56,16 @@ const getUser = async (req , res = response ) => {
     });
 }
 
+const getUserToken = async (req, res = response)=>{
+    res.json({
+        user:req.user.id
+    });
+}
+
 module.exports = {
     createUser,
     updateUser,
     deleteUser,
-    getUser
+    getUser,
+    getUserToken
 }

@@ -6,14 +6,12 @@ const server = new Server();
 server.listen();
 
 // PERFIL
-// Comprobar detalle de validaciones en cliente y servidor para actualizar perfil.
-// controlar formulario
-// controlar la ruta y los datos que llegan en los middlewares
-// cargar los posteos de esa persona en el perfil y si es el usuario, lo actualiza al igual que su perfil
+// revisar detalles para la vista de los posteos en un perfil
 
 //POSTEO
-// permitir crear un post y hacer fetch de un post (para cargarlos al index) publico y privado
 // despues revisar sistema de busqueda mediante categorias y etiquetado (x ahora cargar cualquier posteo)
+// implementar sistema de likes y tags
+// realizar las validaciones de la consigna
 
 /*
 Se necesita implementar una aplicación web que permita almacenar, ordenar, buscar, vender y
@@ -23,7 +21,7 @@ La comunidad se debe regir por normas de
 comportamiento y condiciones de uso que favorezcan la buena gestión de los contenidos.
 
 Funcionabilidades (Requerimientos mínimos):
-1.- Sistema de autenticación de usuarios.            Agregar JWT a creacion para login automatico
+1.- Sistema de autenticación de usuarios.
 2.- Gestor de contenidos (CRUD imágenes)
     2.1 Sistema de etiquetado de contenido
     2.2 Sistema de comentarios de contenido (CRUD comentarios)

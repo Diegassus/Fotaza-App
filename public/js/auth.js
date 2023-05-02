@@ -60,7 +60,19 @@ formSignin.addEventListener('submit',e=>{
     body:JSON.stringify(formData),
     headers:{ 'Content-Type' : 'application/json' }
 }).then(res => res.json()).then(({msg})=>{
-    alert(msg);
+    fetch(url + 'login',{
+        method:'POST',
+        body:JSON.stringify(formData),
+        headers:{ 'Content-Type' : 'application/json' }
+    }).then(res => res.json()).then(({msg,token})=>{
+        if(msg){
+            return console.error(msg);
+        }
+        localStorage.setItem('Authorization' , token);
+        window.location.href = "http://localhost:8080/"
+    }).catch(e=>{
+        console.log(e);
+    })
 }).catch(e=>{
     console.log(e);
 })

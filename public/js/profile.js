@@ -1,8 +1,61 @@
-/// manejo de actualizacion de perfil ///
+
+
+// cargar boton para la vista 
+if(!window.location.pathname.includes('edit')){
+    const divEdit = document.getElementById('about');
+    const idProf = document.getElementById('idProf');
+    fetch('http://localhost:8080/user',{
+        headers: {'Authorization' : localStorage.getItem("Authorization")}
+    }).then(resp => resp.json()).then(data => {
+        if(data.user == idProf.value){
+            divEdit.innerHTML+=`<a href="http://localhost:8080/profile/edit/${data.user}">Editar perfil </a>`
+            console.log('hola')
+        }
+    });
+    fetch(`http://localhost:8080/image/${idProf.value}`).then(resp => resp.json()).then(data => {
+        const {images} = data;
+        const tabla = document.getElementById('tabla');
+        const options = {
+            init(img) {
+              img.crossOrigin = 'anonymous'
+            }
+          };
+          let tml;
+        images.forEach(element => {
+            watermark([`http://localhost:8080/uploads/image/${element.src}`],options)
+            .image(watermark.text.lowerRight(`${element.watermartk}`,'#ffffff', 0.5))
+            .then(function (img) {
+                tml = `
+                <div class="mt-4">
+                    <h4>${element.title}</h4>
+                    <div class="container publicacion mt-1 mb-2 contFoto">
+                        <img src="${img.src}" class="w-100 h-auto">
+                    </div>
+                    <div class="stars">
+                        <i class="far fa-star" data-value="1"></i>
+                        <i class="far fa-star" data-value="2"></i>
+                        <i class="far fa-star" data-value="3"></i>
+                        <i class="far fa-star" data-value="4"></i>
+                        <i class="far fa-star" data-value="5"></i>
+                        <span>${element.stars}</span>
+                    </div>      
+                    
+                    <p>${element.description}</p>
+                    <p>${element.tags}</p>
+
+                    <hr>
+                </div>
+                `;
+                tabla.innerHTML+=(tml);
+            });
+        });
+    })
+}else{
+    /// manejo de actualizacion de perfil ///
 
 const formUpdate = document.getElementById('actualizar');
-const formPerfil = document.getElementById('imagenPerfil');
-const formFondo = document.getElementById('imagenFondo');
+
+
 
 formUpdate.addEventListener('submit',(e)=>{
     e.preventDefault();
@@ -38,4 +91,4 @@ formUpdate.addEventListener('submit',(e)=>{
         console.error(e);
     })
 })
-
+}

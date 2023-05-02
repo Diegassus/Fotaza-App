@@ -5,13 +5,11 @@ const { Profile, User } = require("../models");
 const getProfile = async (req , res = response) => {
     const {id} = req.params;
     const profile = await Profile.findOne({where:{UserId:id}});
-    const user = await User.findOne({where:{id}});
     res.render('profile',{
-        profile,
-        user
+        profile
     });
-    
 }
+
 
 const getEdit = async(req,res = response)=>{
     const {id} = req.params;

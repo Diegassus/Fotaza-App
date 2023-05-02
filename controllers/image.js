@@ -1,4 +1,5 @@
 const { response } = require("express");
+const jwt = require('jsonwebtoken');
 const sharp = require('sharp');
 const {Category,Right,Image} = require('../models');
 const { v4 : uuidv4 } = require('uuid');
@@ -8,9 +9,10 @@ const path = require('path');
 const postImage = async (req,res = response)=>{ // manejar el post a la DB
     try{
         const valid = ['png','jpg','jpeg']
-        const{id} = req.params;
-        const {title,description,CategoryId,RightId,watermark,type,tags} = req.body;
+        const {title,description,CategoryId,RightId,watermark,type,tags,token} = req.body;
         const {src} = req.files;
+
+        const {id} = jwt.verify(token, process.env.SECRET);
 
         // subir y mover la foto
         const shortName = src.name.split('.');
@@ -94,7 +96,10 @@ const getPublic = async (req,res = response)=>{
     const response = await Image.findAll({
         where:{
             type:false
-        }
+        },
+        order: [
+            ['createdAt', 'DESC']
+          ]
     });
     res.json({
         response
@@ -102,14 +107,31 @@ const getPublic = async (req,res = response)=>{
 }
 
 const getAll = async (req,res = response)=>{
-    const response = await Image.findAll();
+    const response = await Image.findAll({
+        order: [
+            ['createdAt', 'DESC']
+          ]
+    });
     res.json({
         response
     });
 }
 
+const getUserImage = async (req,res=response)=>{
+    const {idProfile} = req.params;
+    const images = await Image.findAll({
+        where:{
+            UserId:idProfile
+        }
+    });
+    res.json({
+        images
+    })
+}
+
 module.exports = {
     postImage,
     getAll,
-    getPublic
+    getPublic,
+    getUserImage
 }

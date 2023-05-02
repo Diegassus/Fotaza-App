@@ -1,6 +1,6 @@
 const {Router} = require('express');
 const {validateFile,jwtValidator} = require('../middlewares');
-const { postImage, getPublic, getAll } = require('../controllers');
+const { postImage, getPublic, getAll, getUserImage } = require('../controllers');
 const router = Router();
 
 
@@ -11,6 +11,7 @@ router.get('/auth',[jwtValidator],getAll);
 
 router.get('/',getPublic);
 
+router.get('/:idProfile',getUserImage)
 
 
 module.exports = router ;

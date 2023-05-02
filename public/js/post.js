@@ -1,5 +1,8 @@
 const catDiv = document.getElementById('categorias');
 const derDiv = document.getElementById('derechos');
+const idUser = document.getElementById('idUser');
+
+idUser.value = localStorage.getItem('Authorization')
 
 fetch('http://localhost:8080/rights').then(response => response.json()).then(data => {
     const {rights} = data;
