@@ -17,7 +17,8 @@ class Server {
             image:'/image',
             upload:'/uploads',
             category:'/category',
-            rights:'/rights'
+            rights:'/rights',
+            stars:'/stars'
         } 
 
         // conectar a la base de datos con sequelize
@@ -63,6 +64,7 @@ class Server {
         this.app.use(this.paths.upload,require('../routes/uploads'));
         this.app.use(this.paths.category,require('../routes/category'));
         this.app.use(this.paths.rights,require('../routes/rights'));
+        this.app.use(this.paths.stars,require('../routes/stars.js'));
     }
 
     async connectDB(){

@@ -11,6 +11,8 @@ html(lang="en")
         title Perfil de usuario
         
     body.container
+        a(href="/" class="back") 
+            span Volver
         div.header(style=`background-image: url('http://localhost:8080/uploads/portrait/${profile.portrait}/${profile.id}'); repeat: no-repeat; background-size: cover;`)
             img(src=`/uploads/imageSrc/${profile.imageSrc}/${profile.UserId}`).avatar
             h1.username #{profile.lastname}

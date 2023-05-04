@@ -10,6 +10,8 @@ head
         
 body.row.mb-5
     div.col-md-8.offset-md-2.mt-4.contenedor
+        a(href=`/profile/${profile.id}` class="back") 
+            span Volver
         div.col-md-12.mt-2.contenido
             div(class="marcoPortada mt-3")
                 img(src=`http://localhost:8080/uploads/portrait/${profile.portrait}/${profile.id}`, alt="Portada" class="w-100 h-auto mb-3")

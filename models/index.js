@@ -35,5 +35,6 @@ module.exports = {
     Profile,
     Image,
     Right,
-    Category
+    Category,
+    Like
 }

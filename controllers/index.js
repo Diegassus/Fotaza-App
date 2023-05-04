@@ -3,7 +3,7 @@ const Auth = require('./auht');
 const Profile = require('./profile');
 const Upload = require('./uploads');
 const Image = require('./image');
-
+const Stars = require('./stars');
 
 
 module.exports = {
@@ -11,5 +11,6 @@ module.exports = {
     ...Auth,
     ...Profile,
     ...Upload,
-    ...Image
+    ...Image,
+    ...Stars
 }

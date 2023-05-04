@@ -56,3 +56,35 @@ a{
 .about p{
     color : #e6e6e6;
 }
+
+.back{
+    background-color: #363331;
+    box-shadow: 0 14px 28px rgba(255, 254, 254, 0.25),0 10px 10px rgba(156, 84, 2, 0.22);
+    padding: 5px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #e6e6e6;
+}
+
+.clasificacion{
+    direction: rtl;/* right to left */
+    unicode-bidi: bidi-override;/* bidi de bidireccional */
+}
+
+.promedio{
+    direction: ltr;
+    unicode-bidi: bidi-override;
+}
+label:hover{color:goldenrod;}
+
+label:hover ~ label{color:orange;}
+
+input[type = "radio"]:checked ~ label{color:orange;}
+
+.formVal p{
+    text-align: end;
+}
+
+input[type = "radio"]{
+    display: none;
+}

@@ -40,4 +40,30 @@ header{
     width: 400px;
     height: auto;
 }
+  
+  input[type="radio"] {
+    display: none;
+  }
+  
+  .clasificacion {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+  }
+  
+  label:hover,
+  label:hover ~ label {
+    color: orange;
+  }
+  
+  input[type="radio"]:checked ~ label {
+    color: orange;
+  }
+  
 
+.formVal p{
+    text-align: end;
+}
+.promedio{
+    direction: ltr;
+    unicode-bidi: bidi-override;
+}

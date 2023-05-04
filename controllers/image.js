@@ -1,7 +1,7 @@
 const { response } = require("express");
 const jwt = require('jsonwebtoken');
 const sharp = require('sharp');
-const {Category,Right,Image} = require('../models');
+const {Category,Right,Image, Like} = require('../models');
 const { v4 : uuidv4 } = require('uuid');
 const path = require('path');
 
@@ -36,7 +36,7 @@ const postImage = async (req,res = response)=>{ // manejar el post a la DB
 
         // validar la privacidad
         let privacy
-        if(type){
+        if(type || RightId == 4 ){
             privacy = true;
         }else{
             privacy = false;
@@ -83,7 +83,6 @@ const postImage = async (req,res = response)=>{ // manejar el post a la DB
 
         // posteo
         const response = await Image.create(data);
-
         res.redirect('/');
     }catch(error){
         res.status(500).json({
@@ -112,8 +111,22 @@ const getAll = async (req,res = response)=>{
             ['createdAt', 'DESC']
           ]
     });
+    const like = await Like.findAll({
+        where:{
+            ImageId:response.map(element => element.id),
+            UserId:req.user.id
+        }
+    });
+
+    const likes = {}
+
+    like.forEach(element => {
+        likes[element.ImageId] = element.stars;
+    });
+
     res.json({
-        response
+        response,
+        likes
     });
 }
 
