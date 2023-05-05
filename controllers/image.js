@@ -4,6 +4,7 @@ const sharp = require('sharp');
 const {Category,Right,Image, Like} = require('../models');
 const { v4 : uuidv4 } = require('uuid');
 const path = require('path');
+const { Op } = require("sequelize");
 
 
 const postImage = async (req,res = response)=>{ // manejar el post a la DB
@@ -142,9 +143,89 @@ const getUserImage = async (req,res=response)=>{
     })
 }
 
+const getTagPublic = async (req,res = response)=>{
+    const {tag} = req.params
+    const response = await Image.findAll({
+        where:{
+            tags:{
+                [Op.like]:`%${tag}%`
+            },
+            type:false
+        }
+    });
+    res.json({
+        response
+    })
+}
+
+const getTagAuth = async (req,res = response)=>{
+    const {tag} = req.params
+    const response = await Image.findAll({
+        where:{
+            tags:{
+                [Op.like]:`%${tag}%`
+            }
+        }
+    });
+    const like = await Like.findAll({
+        where:{
+            ImageId:response.map(element => element.id),
+            UserId:req.user.id
+        }
+    });
+
+    const likes = {}
+
+    like.forEach(element => {
+        likes[element.ImageId] = element.stars;
+    });
+
+    res.json({
+        response,
+        likes
+    });
+}
+
+const getCatAuth = async (req,res = response)=>{
+    const {category} = req.params
+
+    const cat = await Category.findOne({
+        where:{
+            name:category
+        }
+    });
+
+    const response = await Image.findAll({
+        where:{
+            CategoryId:cat.id
+        }
+    });
+    
+    const like = await Like.findAll({
+        where:{
+            ImageId:response.map(element => element.id),
+            UserId:req.user.id
+        }
+    });
+
+    const likes = {}
+
+    like.forEach(element => {
+        likes[element.ImageId] = element.stars;
+    });
+
+    res.json({
+        response,
+        likes
+    });
+}
+
 module.exports = {
     postImage,
     getAll,
     getPublic,
-    getUserImage
+    getUserImage,
+    getTagPublic,
+    getTagAuth,
+    getCatAuth
 }

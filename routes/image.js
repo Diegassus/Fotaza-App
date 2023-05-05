@@ -1,6 +1,6 @@
 const {Router} = require('express');
 const {validateFile,jwtValidator} = require('../middlewares');
-const { postImage, getPublic, getAll, getUserImage } = require('../controllers');
+const { postImage, getPublic, getAll, getUserImage, getTagPublic, getTagAuth, getCatAuth } = require('../controllers');
 const router = Router();
 
 
@@ -12,6 +12,12 @@ router.get('/auth',[jwtValidator],getAll);
 router.get('/',getPublic);
 
 router.get('/:idProfile',getUserImage)
+
+router.get('/tag/:tag',getTagPublic);
+
+router.get('/tagAuth/:tag',[jwtValidator],getTagAuth);
+
+router.get('/cat/:category',[jwtValidator],getCatAuth)
 
 
 module.exports = router ;

@@ -11,7 +11,7 @@ fetch('http://localhost:8080/rights').then(response => response.json()).then(dat
         html += `<option value="${element.id}">${element.name}</option>`
     });
     derDiv.innerHTML = html;
-})
+});
 
 fetch('http://localhost:8080/category').then(response => response.json()).then(data => {
     const {msg,categories} = data;
@@ -22,7 +22,7 @@ fetch('http://localhost:8080/category').then(response => response.json()).then(d
         });
         catDiv.innerHTML = html;
     }
-})
+});
 
 
 

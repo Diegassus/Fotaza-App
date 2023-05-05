@@ -1,13 +1,3 @@
-#drop > button{
-    border: 1px solid #ec7336;
-  background: #ec7336;
-  color: #1f1d1c;
-}
-
-#menu > a{
-    color:#e6e6e6;
-}
-
 body{
     background: #363331;
     color : #e6e6e6;
@@ -18,8 +8,17 @@ header{
     box-shadow: 0 14px 28px rgba(255, 254, 254, 0.25),0 10px 10px rgba(156, 84, 2, 0.22);
 }
 
-.nav-link, .navbar-brand{
-    color: #e6e6e6;
+.cat{
+    background: #363331;
+    color : #e6e6e6;
+    box-shadow: 0 14px 28px rgba(96, 96, 96, 0.25),0 10px 10px rgba(54, 29, 0, 0.22);
+    margin: 0px 20px;
+}
+
+#categorias{
+    width: 50%;
+    display: flex;
+    justify-content: center;
 }
 
 #display-content{
@@ -28,13 +27,6 @@ header{
   box-shadow: 0 14px 28px rgba(255, 254, 254, 0.25),0 10px 10px rgba(156, 84, 2, 0.22);
 }
 
-.search{
-    border: #ec7336;
-}
-
-.search:hover{
-    background: #ec7336;
-}
 
 .publicacion{
     width: 400px;
@@ -66,8 +58,4 @@ header{
 .promedio{
     direction: ltr;
     unicode-bidi: bidi-override;
-}
-
-a{
-  text-decoration: none;
 }
