@@ -5,6 +5,9 @@ const server = new Server();
 
 server.listen();  // Revisar TODAS las rutas y contemplar donde puede tirar un error (Tambien validar los datos que deben llegar con el check de express.validator). Crear vistas para los errores o devolver json con un mensaje y mostrarlo en la vista correspondiente del fetch con un catch
 
+// cargar los comentarios a la vez que se cargan los posteos
+
+// establecer una foto de perfil por defecto
 /**
  * 
  * Validaciones
@@ -59,3 +62,9 @@ contactar y enviar un mensaje al autor respecto de su interés por adquirir la i
 
 Realizar en el sistema para subir imagenes, uno para eliminar la anterior y de tal manera borrar basura
 */
+
+// Token del amigo Allan
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibmluamFsb3ZlcjI0OUBnbWFpbC5jb20iLCJJZCI6IjEiLCJleHAiOjE2ODM4NTg4NTIsImlzcyI6ImlubW9iaWxpYXJpYV9hcGkiLCJhdWQiOiJtb2JpbGVBUFAifQ.fiR4v7pi4_vXJ4PHFGUQcJBk58y6zTklJpHyfkIr4dw
+
+// Token del amigo Nica
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiamVtb250aWVsMDZAZ21haWwuY29tIiwiTm9tYnJlIjoiSm9uYXRoYW4gTW9udGllbCIsIklkIjoiMyIsIkdydXBvIjoiMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlByb3BpZXRhcmlvIiwiZXhwIjoxNjg0Nzg0OTQ0LCJpc3MiOiJpbm1vYmlsaWFyaWFVTFAiLCJhdWQiOiJtb2JpbGVBUFAifQ.WMizx753Df7Owf5YchDCEdqOjfLhxZVLdsQWHWGJoEs

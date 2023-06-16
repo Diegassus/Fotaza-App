@@ -71,3 +71,12 @@ header{
 a{
   text-decoration: none;
 }
+
+.fotito{
+  width: 20px;
+  height: 20px;
+}
+
+.fotito > img{
+  width: 15%;
+}

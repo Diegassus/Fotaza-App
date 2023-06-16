@@ -8,8 +8,7 @@ const { Op } = require("sequelize");
 
 
 const postImage = async (req,res = response)=>{ // manejar el post a la DB
-    try{
-        const valid = ['png','jpg','jpeg']
+    const valid = ['png','jpg','jpeg','webp']
         const {title,description,CategoryId,RightId,watermark,type,tags,token} = req.body;
         const {src} = req.files;
 
@@ -25,7 +24,7 @@ const postImage = async (req,res = response)=>{ // manejar el post a la DB
         const uploadPath = path.join(__dirname,'../uploads',temporalName);
         src.mv(uploadPath, (err) => {
             if(err){
-                return reject(err);
+                return reject(err + 'hola');
             }
         });
 
@@ -33,8 +32,10 @@ const postImage = async (req,res = response)=>{ // manejar el post a la DB
         let resolution;
         await sharp(uploadPath).metadata().then(metadata => {
             resolution = `${metadata.width}x${metadata.height}`
+        }).catch(err => {
+            resolution = '0x0'
+            console.log(err)
         });
-
         // validar la privacidad
         let privacy
         if(type || RightId == 4 ){
@@ -81,15 +82,10 @@ const postImage = async (req,res = response)=>{ // manejar el post a la DB
             CategoryId,
             RightId
         }
-
+        console.log('90')
         // posteo
         const response = await Image.create(data);
         res.redirect('/');
-    }catch(error){
-        res.status(500).json({
-            error
-        })
-    }
 }
 
 const getPublic = async (req,res = response)=>{

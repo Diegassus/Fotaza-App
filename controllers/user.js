@@ -5,8 +5,15 @@ const { User, Profile } = require('../models');
 
 
 const createUser = async ( req , res = response ) => {
-    console.log("llego")
     const {email,username,password} = req.body ;
+
+    const userDb = await User.findOne({where:{email}});
+    const userDb2 = await User.findOne({where:{username}});
+    if(userDb || userDb2){
+        return res.status(400).json({
+            msg:'Ya existe esta cuenta'
+        })
+    }
     const pass = crypt(password);
     const user = await User.create({username,email,password:pass});
     const profile = await Profile.create();

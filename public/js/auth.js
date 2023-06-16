@@ -29,10 +29,13 @@ formLogin.addEventListener('submit',(e)=>{
           formData[el.name] = el.value 
       }
   }
-  fetch(url + 'login',{
+  //console.log(formData)
+  fetch('http://localhost:8080/auth/login',{
       method:'POST',
       body:JSON.stringify(formData),
-      headers:{ 'Content-Type' : 'application/json' }
+      headers:{
+          'Content-Type':'application/json'
+      }
   }).then(res => res.json()).then(({msg,token})=>{
       if(msg){
           return console.error(msg);
@@ -54,16 +57,20 @@ formSignin.addEventListener('submit',e=>{
           formData[el.name] = el.value 
       }
   }
-  
-  fetch(urlCreate,{
+  fetch('http://localhost:8080/user',{
     method:'POST',
     body:JSON.stringify(formData),
-    headers:{ 'Content-Type' : 'application/json' }
+    headers:{
+        'Content-Type':'application/json'
+    }
 }).then(res => res.json()).then(({msg})=>{
+    if(msg.includes('existe')) return
     fetch(url + 'login',{
         method:'POST',
         body:JSON.stringify(formData),
-        headers:{ 'Content-Type' : 'application/json' }
+        headers:{
+            'Content-Type':'application/json'
+        }
     }).then(res => res.json()).then(({msg,token})=>{
         if(msg){
             return console.error(msg);

@@ -19,8 +19,8 @@ router.post('/',[
     check('username','El nombre de usuario es obligatorio').notEmpty(),
     check('password','La contraseña debe contener minimo 6 caracteres').isLength(6),
     check('email','El correo es obligatorio').isEmail(),
-    check('email').custom(userExists),
-    check('username').custom(usernameExists),
+    // check('email').custom(userExists),
+    // check('username').custom(usernameExists),
     validateInputs
 ], createUser);
 

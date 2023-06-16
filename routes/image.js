@@ -5,7 +5,7 @@ const router = Router();
 
 
 
-router.post('/:id',validateFile,postImage); // desarrollar logica para publicar una imagen
+router.post('/',validateFile,postImage); // desarrollar logica para publicar una imagen
 
 router.get('/auth',[jwtValidator],getAll);
 

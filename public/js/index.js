@@ -1,33 +1,33 @@
-const ulMenu = document.getElementById('menu');
+const ulMenu = document.getElementById("menu");
 let boton = null;
 let formularios = new Set();
+const socket = io();
 // cargar imagenes
 
+let usuario = null;
 
-let usuario = null
+const validarJWT = async () => {
+  const token = localStorage.getItem("Authorization") || "";
+  if (token.length > 10) {
+    const resp = await fetch("http://localhost:8080/auth", {
+      headers: { Authorization: localStorage.getItem("Authorization") },
+    });
+    const { user, token } = await resp.json();
 
-const validarJWT = async ()=>{
-    const token = localStorage.getItem('Authorization') || '' ;
-    if(token.length > 10){
-        const resp = await fetch("http://localhost:8080/auth",{
-            headers: {'Authorization' : localStorage.getItem('Authorization')}
-        });
-        const {user , token} = await resp.json();
+    localStorage.setItem("Authorization", token);
+    usuario = user;
+    cargarBarraUsuario(usuario);
+  } else {
+    cargarNormal();
+  }
+};
 
-        localStorage.setItem('Authorization',token)
-        usuario = user ;
-        cargarBarraUsuario(usuario);
-    }else{
-        cargarNormal();
-    }
-}
+const main = async () => {
+  await validarJWT();
+};
 
-const main = async ()=>{
-    await validarJWT(); 
-}
-
-const cargarNormal=()=>{
-    const html = `
+const cargarNormal = () => {
+  const html = `
     <ul class="navbar-nav flex-grow-1" >
         <li class="nav-item">
             <div>
@@ -43,26 +43,33 @@ const cargarNormal=()=>{
     </ul>
     `;
 
-    ulMenu.innerHTML = html;
-    busqueda = document.getElementById('busqueda');
-    busqueda.addEventListener("submit",(e)=>{
-        e.preventDefault(); // mostrar todos los post publicos con esa etiqueta
-        const tag = document.getElementById('tags').value
-        fetch(`http://localhost:8080/image/tag/${tag}`).then(resp => resp.json()).then(data => {
-            const {response} = data;
-        const tabla = document.getElementById('load');
-        tabla.innerHTML=''
+  ulMenu.innerHTML = html;
+  busqueda = document.getElementById("busqueda");
+  busqueda.addEventListener("submit", (e) => {
+    e.preventDefault(); // mostrar todos los post publicos con esa etiqueta
+    const tag = document.getElementById("tags").value;
+    fetch(`http://localhost:8080/image/tag/${tag}`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        const { response } = data;
+        const tabla = document.getElementById("load");
+        tabla.innerHTML = "";
         let tml;
         const options = {
-            init(img) {
-              img.crossOrigin = 'anonymous'
-            }
-          };
-        response.forEach(element => {
-            watermark([`http://localhost:8080/uploads/image/${element.src}`],options)
-            .image(watermark.text.lowerRight(`${element.watermartk}`,'#ffffff', 0.5))
+          init(img) {
+            img.crossOrigin = "anonymous";
+          },
+        };
+        response.forEach((element) => {
+          watermark(
+            [`http://localhost:8080/uploads/image/${element.src}`],
+            options
+          )
+            .image(
+              watermark.text.lowerRight(`${element.watermartk}`, "#ffffff", 0.5)
+            )
             .then(function (img) {
-                tml = `
+              tml = `
                 <div class="mt-4">
                     <h4>${element.title}</h4>
                     <div class="container publicacion mt-1 mb-2 contFoto">
@@ -73,27 +80,34 @@ const cargarNormal=()=>{
 
                     <hr>
                 </div>
-                `;;
-                tabla.innerHTML+=(tml);
+                `;
+              tabla.innerHTML += tml;
             });
         });
-        })
-    })
+      });
+  });
 
-    fetch('http://localhost:8080/image').then(resp => resp.json()).then(data => {
-        const {response} = data;
-        const tabla = document.getElementById('load');
-        let tml;
-        const options = {
-            init(img) {
-              img.crossOrigin = 'anonymous'
-            }
-          };
-        response.forEach(element => {
-            watermark([`http://localhost:8080/uploads/image/${element.src}`],options)
-            .image(watermark.text.lowerRight(`${element.watermartk}`,'#ffffff', 0.5))
-            .then(function (img) {
-                tml = `
+  fetch("http://localhost:8080/image")
+    .then((resp) => resp.json())
+    .then((data) => {
+      const { response } = data;
+      const tabla = document.getElementById("load");
+      let tml;
+      const options = {
+        init(img) {
+          img.crossOrigin = "anonymous";
+        },
+      };
+      response.forEach((element) => {
+        watermark(
+          [`http://localhost:8080/uploads/image/${element.src}`],
+          options
+        )
+          .image(
+            watermark.text.lowerRight(`${element.watermartk}`, "#ffffff", 0.5)
+          )
+          .then(function (img) {
+            tml = `
                 <div class="mt-4">
                     <h4>${element.title}</h4>
                     <div class="container publicacion mt-1 mb-2 contFoto">
@@ -104,15 +118,15 @@ const cargarNormal=()=>{
 
                     <hr>
                 </div>
-                `;;
-                tabla.innerHTML+=(tml);
-            });
-        });
+                `;
+            tabla.innerHTML += tml;
+          });
+      });
     });
-}
+};
 
-const cargarBarraUsuario = async (usuario)=>{
-    const html = `
+const cargarBarraUsuario = async (usuario) => {
+  const html = `
 
     <ul class="navbar-nav flex-grow-1" >
         <li class="nav-item">
@@ -147,60 +161,88 @@ const cargarBarraUsuario = async (usuario)=>{
           </div>
     `;
 
-// editar <a class="dropdown-item" href="http://localhost:8080/profile/${usuario.id}">Editar Perfil</a>
-// cerrar <button id="cerrar" class="dropdown-item">Cerrar Sesion</button>
+  // editar <a class="dropdown-item" href="http://localhost:8080/profile/${usuario.id}">Editar Perfil</a>
+  // cerrar <button id="cerrar" class="dropdown-item">Cerrar Sesion</button>
 
-
-    ulMenu.innerHTML = html;
-    boton = document.getElementById('cerrar');
-    boton.addEventListener("click",()=>{
-        localStorage.removeItem('Authorization');
-        window.location = window.location.href = "http://localhost:8080/"
-    });
-    busqueda = document.getElementById('busqueda');
-    busqueda.addEventListener("submit",(e)=>{
-        e.preventDefault(); // mostrar todos los post publicos con esa etiqueta
-        const tag = document.getElementById('tags').value
-        fetch(`http://localhost:8080/image/tagAuth/${tag}`,{
-            headers:{
-                Authorization: localStorage.getItem('Authorization')
-            }
-        }).then(resp => resp.json()).then(data => {
-        const {response,likes} = data;
-        const tabla = document.getElementById('load');
-        tabla.innerHTML=''
+  ulMenu.innerHTML = html;
+  boton = document.getElementById("cerrar");
+  boton.addEventListener("click", () => {
+    localStorage.removeItem("Authorization");
+    window.location = window.location.href = "http://localhost:8080/";
+  });
+  busqueda = document.getElementById("busqueda");
+  busqueda.addEventListener("submit", (e) => {
+    e.preventDefault(); // mostrar todos los post publicos con esa etiqueta
+    const tag = document.getElementById("tags").value;
+    fetch(`http://localhost:8080/image/tagAuth/${tag}`, {
+      headers: {
+        Authorization: localStorage.getItem("Authorization"),
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        const { response, likes } = data;
+        const tabla = document.getElementById("load");
+        tabla.innerHTML = "";
         let tml;
         let cont = 1;
         const options = {
-            init(img) {
-              img.crossOrigin = 'anonymous'
-            }
-          };
-          response.forEach(element => {
-            watermark([`http://localhost:8080/uploads/image/${element.src}`],options)
-            .image(watermark.text.lowerRight(`${element.watermartk}`,'#ffffff', 0.5))
+          init(img) {
+            img.crossOrigin = "anonymous";
+          },
+        };
+        response.forEach((element) => {
+          watermark(
+            [`http://localhost:8080/uploads/image/${element.src}`],
+            options
+          )
+            .image(
+              watermark.text.lowerRight(`${element.watermartk}`, "#ffffff", 0.5)
+            )
             .then(function (img) {
-                tml = `
+              tml = `
                 <div class="mt-4">
                     <h4>${element.title}</h4>
-                    <span><a href="http://localhost:8080/profile/${element.UserId}">Visitar creador</a></span>
+                    <span><a href="http://localhost:8080/profile/${
+                      element.UserId
+                    }">Visitar creador</a></span>
                     <div class="container publicacion mt-1 mb-2 contFoto">
                         <img src="${img.src}" class="w-100 h-auto">
                     </div>
                     <div class="valoracion">
                         <form class="formVal">
                             <p class="clasificacion">
-                                <span id="a${element.id}" class="promedio">${element.stars}</span>
+                                <span id="a${element.id}" class="promedio">${
+                element.stars
+              }</span>
                                 <input type="radio" id="${cont}" name="estrellas">
-                                <label onclick="puntuar(5,${element.id})" for="${cont}" class="star"><i class="fa-regular fa-star"></i></label>
-                                <input type="radio" id="${cont+1}">
-                                <label onclick="puntuar(4,${element.id})" for="${cont+1}"class="star"><i class="fa-regular fa-star"></i></label>
-                                <input type="radio" id="${cont+2}">
-                                <label onclick="puntuar(3,${element.id})" for="${cont+2}"class="star"><i class="fa-regular fa-star"></i></label>
-                                <input type="radio" id="${cont+3}">
-                                <label onclick="puntuar(2,${element.id})" for="${cont+3}"class="star"><i class="fa-regular fa-star"></i></label>
-                                <input type="radio" id="${cont+4}">
-                                <label class="star" onclick="puntuar(1,${element.id})" for="${cont+4}"><i class="fa-regular fa-star"></i></label>
+                                <label onclick="puntuar(5,${
+                                  element.id
+                                })" for="${cont}" class="star"><i class="fa-regular fa-star"></i></label>
+                                <input type="radio" id="${cont + 1}">
+                                <label onclick="puntuar(4,${
+                                  element.id
+                                })" for="${
+                cont + 1
+              }"class="star"><i class="fa-regular fa-star"></i></label>
+                                <input type="radio" id="${cont + 2}">
+                                <label onclick="puntuar(3,${
+                                  element.id
+                                })" for="${
+                cont + 2
+              }"class="star"><i class="fa-regular fa-star"></i></label>
+                                <input type="radio" id="${cont + 3}">
+                                <label onclick="puntuar(2,${
+                                  element.id
+                                })" for="${
+                cont + 3
+              }"class="star"><i class="fa-regular fa-star"></i></label>
+                                <input type="radio" id="${cont + 4}">
+                                <label class="star" onclick="puntuar(1,${
+                                  element.id
+                                })" for="${
+                cont + 4
+              }"><i class="fa-regular fa-star"></i></label>
                             </p>
                         </form>
                     </div>   
@@ -209,115 +251,214 @@ const cargarBarraUsuario = async (usuario)=>{
                     <hr>
                 </div>
                 `;
-                tabla.innerHTML+=(tml);
-                if(likes[element.id] != undefined){
-                    value = likes[element.id]
-                    switch(value){
-                        case 1:
-                            document.getElementById(cont).checked = true;
-                            break;
-                        case 2:
-                            document.getElementById(cont+1).checked = true;
-                            break;
-                        case 3:
-                            document.getElementById(cont+2).checked = true;
-                            break;
-                        case 4:
-                            document.getElementById(cont+3).checked = true;
-                            break;
-                        case 5:
-                            document.getElementById(cont+4).checked = true;
-                            break;
-                    }
+              tabla.innerHTML += tml;
+              if (likes[element.id] != undefined) {
+                value = likes[element.id];
+                switch (value) {
+                  case 1:
+                    document.getElementById(cont).checked = true;
+                    break;
+                  case 2:
+                    document.getElementById(cont + 1).checked = true;
+                    break;
+                  case 3:
+                    document.getElementById(cont + 2).checked = true;
+                    break;
+                  case 4:
+                    document.getElementById(cont + 3).checked = true;
+                    break;
+                  case 5:
+                    document.getElementById(cont + 4).checked = true;
+                    break;
                 }
-                cont += 10;
+              }
+              cont += 10;
             });
         });
-        })
-    })
-    await fetch('http://localhost:8080/image/auth',{
-        headers: {'Authorization' : localStorage.getItem('Authorization')}
-    }).then(resp => resp.json()).then(data => {
-        const {response,likes} = data;
-        const tabla = document.getElementById('load');
-        const options = {
-            init(img) {
-              img.crossOrigin = 'anonymous'
-            }
-          };
-          let tml;
-        let cont = 1;
-        response.forEach(element => {
-            watermark([`http://localhost:8080/uploads/image/${element.src}`],options)
-            .image(watermark.text.lowerRight(`${element.watermartk}`,'#ffffff', 0.5))
-            .then(function (img) {
-                tml = `
+      });
+  });
+  await conectarSocket(); // conecto socket
+  await fetch("http://localhost:8080/image/auth", {
+    headers: { Authorization: localStorage.getItem("Authorization") },
+  })
+    .then((resp) => resp.json())
+    .then((data) => {
+      const { response, likes } = data;
+      const tabla = document.getElementById("load");
+      const options = {
+        init(img) {
+          img.crossOrigin = "anonymous";
+        },
+      };
+      let tml;
+      let cont = 1;
+      response.forEach((element) => {
+        watermark(
+          [`http://localhost:8080/uploads/image/${element.src}`],
+          options
+        )
+          .image(
+            watermark.text.lowerRight(`${element.watermartk}`, "#ffffff", 0.5)
+          )
+          .then(function (img) {
+            tml = `
                 <div class="mt-4">
                     <h4>${element.title}</h4>
-                    <span><a href="http://localhost:8080/profile/${element.UserId}">Visitar creador</a></span>
+                    <span><a href="http://localhost:8080/profile/${
+                      element.UserId
+                    }">Visitar creador</a></span>
                     <div class="container publicacion mt-1 mb-2 contFoto">
                         <img src="${img.src}" class="w-100 h-auto">
                     </div>
                     <div class="valoracion">
                         <form class="formVal">
                             <p class="clasificacion">
-                                <span id="a${element.id}" class="promedio">${element.stars}</span>
+                                <span id="a${element.id}" class="promedio">${
+              element.stars
+            }</span>
                                 <input type="radio" id="${cont}" name="estrellas">
-                                <label onclick="puntuar(5,${element.id})" for="${cont}" class="star"><i class="fa-regular fa-star"></i></label>
-                                <input type="radio" id="${cont+1}">
-                                <label onclick="puntuar(4,${element.id})" for="${cont+1}"class="star"><i class="fa-regular fa-star"></i></label>
-                                <input type="radio" id="${cont+2}">
-                                <label onclick="puntuar(3,${element.id})" for="${cont+2}"class="star"><i class="fa-regular fa-star"></i></label>
-                                <input type="radio" id="${cont+3}">
-                                <label onclick="puntuar(2,${element.id})" for="${cont+3}"class="star"><i class="fa-regular fa-star"></i></label>
-                                <input type="radio" id="${cont+4}">
-                                <label class="star" onclick="puntuar(1,${element.id})" for="${cont+4}"><i class="fa-regular fa-star"></i></label>
+                                <label onclick="puntuar(5,${
+                                  element.id
+                                })" for="${cont}" class="star"><i class="fa-regular fa-star"></i></label>
+                                <input type="radio" id="${cont + 1}">
+                                <label onclick="puntuar(4,${
+                                  element.id
+                                })" for="${
+              cont + 1
+            }"class="star"><i class="fa-regular fa-star"></i></label>
+                                <input type="radio" id="${cont + 2}">
+                                <label onclick="puntuar(3,${
+                                  element.id
+                                })" for="${
+              cont + 2
+            }"class="star"><i class="fa-regular fa-star"></i></label>
+                                <input type="radio" id="${cont + 3}">
+                                <label onclick="puntuar(2,${
+                                  element.id
+                                })" for="${
+              cont + 3
+            }"class="star"><i class="fa-regular fa-star"></i></label>
+                                <input type="radio" id="${cont + 4}">
+                                <label class="star" onclick="puntuar(1,${
+                                  element.id
+                                })" for="${
+              cont + 4
+            }"><i class="fa-regular fa-star"></i></label>
                             </p>
                         </form>
                     </div>   
                     <p>${element.description}</p>
                     <p>${element.tags}</p>
-                    <hr>
-                </div>
-                `;
-                tabla.innerHTML+=(tml);
-                if(likes[element.id] != undefined){
-                    value = likes[element.id]
-                    switch(value){
-                        case 1:
-                            document.getElementById(cont).checked = true;
-                            break;
-                        case 2:
-                            document.getElementById(cont+1).checked = true;
-                            break;
-                        case 3:
-                            document.getElementById(cont+2).checked = true;
-                            break;
-                        case 4:
-                            document.getElementById(cont+3).checked = true;
-                            break;
-                        case 5:
-                            document.getElementById(cont+4).checked = true;
-                            break;
-                    }
-                }
-                cont += 10;
-            });
-        });
-    });
-}
+                    <div class="commentsContainer">
+                        <h4>Comentarios</h4>
+                        <div class="contInp">
+                            <input type="text" placeholder="Escribe tu comentario" name="description" id="formCom${
+                              element.id
+                            }"> 
+                            <button class="comentar btn btn-info" onclick="comentar(${
+                              element.id
+                            })">comentar</button>
+                        </div>
+                        <div id="comentarios${element.id}">
 
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                `;
+
+            tabla.innerHTML += tml;
+            if (likes[element.id] != undefined) {
+              value = likes[element.id];
+              switch (value) {
+                case 1:
+                  document.getElementById(cont).checked = true;
+                  break;
+                case 2:
+                  document.getElementById(cont + 1).checked = true;
+                  break;
+                case 3:
+                  document.getElementById(cont + 2).checked = true;
+                  break;
+                case 4:
+                  document.getElementById(cont + 3).checked = true;
+                  break;
+                case 5:
+                  document.getElementById(cont + 4).checked = true;
+                  break;
+              }
+            }
+            cont += 10;
+          });
+        fetch(`http://localhost:8080/comment/${element.id}`)
+          .then((resp) => resp.json())
+          .then((data) => {
+            data.forEach((comentario) => {
+              document.getElementById(`comentarios${element.id}`).innerHTML += `
+                    <div class="comentario container">
+            <div class="row">
+                <div class="col-md-4 contNombre">
+                    <p>${comentario.username}</p>
+                </div>
+                <div class="col-md-6">
+                    <p>${comentario.description}</p>
+                </div>
+            </div>
+        </div>`;
+            });
+          });
+      });
+    });
+};
 
 main();
 
-const puntuar = (star,posteo)=>{
-    let data = {star, posteo}
-    fetch('http://localhost:8080/stars',{
-        method:'POST',
-        body: JSON.stringify(data),
-        headers:{'Authorization' : localStorage.getItem("Authorization"), 'Content-Type':'application/json'}})
-        .then(resp => resp.json())
-        .then(data => {
-            document.getElementById(`a${posteo}`).innerHTML = data.promedio ;
-        });
-}
+const puntuar = (star, posteo) => {
+  let data = { star, posteo };
+  fetch("http://localhost:8080/stars", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      Authorization: localStorage.getItem("Authorization"),
+      "Content-Type": "application/json",
+    },
+  })
+    .then((resp) => resp.json())
+    .then((data) => {
+      document.getElementById(`a${posteo}`).innerHTML = data.promedio;
+    });
+};
+
+const comentar = (postId) => {
+  const description = document.getElementById("formCom" + postId).value;
+  socket.emit("comentar", {
+    description,
+    id: postId,
+    token: localStorage.getItem("Authorization"),
+  });
+  //'comentarios' + postId
+};
+
+const conectarSocket = async () => {
+  socket.on("connect", () => {
+    console.log("socket online");
+  });
+
+  socket.on("comentario", (data) => {
+    console.log(data);
+    const { comment, username } = data;
+    const { ImageId, description } = comment;
+    document.getElementById("comentarios" + ImageId).innerHTML += `
+        <div class="comentario container">
+            <div class="row">
+                <div class="col-md-4 contNombre">
+                    <p>${username}</p>
+                </div>
+                <div class="col-md-6">
+                    <p>${description}</p>
+                </div>
+            </div>
+        </div>
+        `;
+  });
+};

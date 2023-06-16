@@ -1,9 +1,8 @@
-
 const { User } = require('../models');
 
 
 const userExists = async ( email ) => {
-    const user = await User.findOne({where:{email:email}});
+    const user = await User.findOne({where:{email}});
     if(user){
         throw new Error('El correo electronico ya se encuentra vinculado a una cuenta');
     }

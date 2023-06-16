@@ -33,6 +33,7 @@ const MAX_TAGS = 3;
 const tagInput = document.getElementById('tag-input');
 const addTag = document.getElementById('mas');
 const mostrarTags = document.getElementById("tags");
+document.getElementById('idUser').value = localStorage.getItem('Authorization');
 let cont = 1;
 
 addTag.addEventListener('click', () => {

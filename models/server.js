@@ -3,13 +3,15 @@ const mime = require('mime-types');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const sequelize = require('../db/config');
-
+const { socketController } = require('../sockets/controller');
 
 class Server {
 
     constructor(){
         this.app = express();
         this.port = process.env.PORT || 8080 ;
+        this.server = require('http').createServer(this.app);
+        this.io = require('socket.io')(this.server);
         this.paths = {
             user:'/user',
             auth:'/auth',
@@ -18,7 +20,8 @@ class Server {
             upload:'/uploads',
             category:'/category',
             rights:'/rights',
-            stars:'/stars'
+            stars:'/stars',
+            comments:'/comment'
         } 
 
         // conectar a la base de datos con sequelize
@@ -32,6 +35,13 @@ class Server {
 
         // enrutamiento
         this.routes();
+
+        // sockets
+        this.sockets();
+    }
+
+    sockets(){
+        this.io.on('connection' , socket => socketController(socket,this.io))
     }
 
     views(){
@@ -64,7 +74,8 @@ class Server {
         this.app.use(this.paths.upload,require('../routes/uploads'));
         this.app.use(this.paths.category,require('../routes/category'));
         this.app.use(this.paths.rights,require('../routes/rights'));
-        this.app.use(this.paths.stars,require('../routes/stars.js'));
+        this.app.use(this.paths.stars,require('../routes/stars'));
+        this.app.use(this.paths.comments,require('../routes/comment'));
     }
 
     async connectDB(){
@@ -77,7 +88,7 @@ class Server {
     }
 
     listen(){
-        this.app.listen(this.port , () => console.log('Servidor corriendo en el puerto', this.port) );
+        this.server.listen(this.port  , () => console.log('Servidor corriendo en el puerto', this.port));
     }
 }
 

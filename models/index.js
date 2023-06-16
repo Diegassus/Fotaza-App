@@ -20,8 +20,8 @@ User.belongsToMany(Image,{through:Like}); // Usuario da muchos likes
 User.belongsToMany(Image,{through:Contact}); // Usuario contacta a muchas publicaciones
 Image.belongsToMany(User,{through:Contact}); // Imagen es contactada por muchos usuarios
 
-User.belongsToMany(Image,{through:Comment});  // Usuario comenta muchas imagenes
-Image.belongsToMany(User,{through:Comment});  // Imagen tiene muchos comentarios  
+// User.belongsToMany(Image,{through:Comment});  // Usuario comenta muchas imagenes
+// Image.belongsToMany(User,{through:Comment});  // Imagen tiene muchos comentarios  
 
 Category.hasMany(Image,{as:'Category',foreignKey:'CategoryId'}); // muchas imagenes se asocian a una categoria
 Image.belongsTo(Category,{as:'Category'}); // Imagen pertnece a una categoria
