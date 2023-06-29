@@ -2,6 +2,7 @@
 
 // cargar boton para la vista 
 if(!window.location.pathname.includes('edit')){
+    let usuario;
     const divEdit = document.getElementById('about');
     const idProf = document.getElementById('idProf');
     fetch('http://localhost:8080/user',{
@@ -9,7 +10,9 @@ if(!window.location.pathname.includes('edit')){
     }).then(resp => resp.json()).then(data => {
         if(data.user == idProf.value){
             divEdit.innerHTML+=`<a href="http://localhost:8080/profile/edit/${data.user}">Editar perfil </a>`
-            console.log('hola')
+            usuario=true;
+        }else{
+            usuario = false;
         }
     });
     fetch(`http://localhost:8080/image/${idProf.value}`).then(resp => resp.json()).then(data => {
@@ -29,6 +32,7 @@ if(!window.location.pathname.includes('edit')){
                 tml = `
                 <div class="mt-4">
                     <h4>${element.title}</h4>
+                    <span id="eliminar${cont+6}" class="btn btn-danger" onclick="eliminar(${element.id})"></span>
                     <div class="container publicacion mt-1 mb-2 contFoto">
                         <img src="${img.src}" class="w-100 h-auto">
                     </div>
@@ -57,25 +61,28 @@ if(!window.location.pathname.includes('edit')){
                 </div>
                 `;
                 tabla.innerHTML+=(tml);
-                if(likes[element.id] != undefined){
-                    value = likes[element.id]
-                    switch(value){
-                        case 1:
-                            document.getElementById(cont).checked = true;
-                            break;
-                        case 2:
-                            document.getElementById(cont+1).checked = true;
-                            break;
-                        case 3:
-                            document.getElementById(cont+2).checked = true;
-                            break;
-                        case 4:
-                            document.getElementById(cont+3).checked = true;
-                            break;
-                        case 5:
-                            document.getElementById(cont+4).checked = true;
-                            break;
-                    }
+                // if(likes[element.id] != undefined){
+                //     value = likes[element.id]
+                //     switch(value){
+                //         case 1:
+                //             document.getElementById(cont).checked = true;
+                //             break;
+                //         case 2:
+                //             document.getElementById(cont+1).checked = true;
+                //             break;
+                //         case 3:
+                //             document.getElementById(cont+2).checked = true;
+                //             break;
+                //         case 4:
+                //             document.getElementById(cont+3).checked = true;
+                //             break;
+                //         case 5:
+                //             document.getElementById(cont+4).checked = true;
+                //             break;
+                //     }
+                // }
+                if(usuario){
+                    document.getElementById(`eliminar${cont+6}`).innerHTML=`Borrar`
                 }
                 cont+=10
             });
@@ -88,39 +95,39 @@ if(!window.location.pathname.includes('edit')){
 
 const formUpdate = document.getElementById('actualizar');
 
-
-
 formUpdate.addEventListener('submit',(e)=>{
     e.preventDefault();
     const formData = {};
     for(let element of formUpdate.elements){
         if(element.name.length > 0){
-            formData[element.name] = element.value ;
+            formData[element.name] = element.value;
         }
     }
-    console.log(formData) // datos formulario
-    fetch("http://localhost:8080/profile",{
+    console.log(formData)
+    fetch("http://localhost:8080/profile/",{
         method:'POST',
         body: JSON.stringify(formData),
         headers:{'Authorization' : localStorage.getItem("Authorization"), 'Content-Type':'application/json'}
-    }).then(res => res.json()).then(response => {
-        const {msg,result} = response;
-        const toastLiveExample = document.getElementById('liveToast')
-        toastLiveExample.innerHTML = `
-            <div class="toast-header">
-                <img src="..." class="rounded me-2" alt="...">
-                <strong class="me-auto">Fotaza</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                ${msg}
-            </div>
-            `;
-        if(result){
-            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
-            toastBootstrap.show();
-        }
-    }).catch(e => {
+    }).then(resp=>{
+        const id = document.getElementById('id').value;
+        window.location.href = `http://localhost:8080/profile/${id}`
+    }
+        )
+    // .then(resp => resp.json()).then(({msg})=>{
+    //     const toastLiveExample = document.getElementById('liveToast')
+    //     toastLiveExample.innerHTML = `
+    //     <div class="toast-header">
+    //         <img src="..." class="rounded me-2" alt="...">
+    //         <strong class="me-auto">Fotaza</strong>
+    //         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    //     </div>
+    //     <div class="toast-body">
+    //         ${msg}
+    //     </div>`
+    //     bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+    //     toastLiveExample.show()
+    // })
+    .catch(e => {
         console.error(e);
     })
 })
@@ -135,5 +142,16 @@ const puntuar = (star,posteo)=>{
         .then(resp => resp.json())
         .then(data => {
             document.getElementById(`a${posteo}`).innerHTML = data.promedio ;
+        });
+}
+
+
+const eliminar = (idFoto)=>{
+    fetch(`http://localhost:8080/image/${idFoto}`,{
+        method:'DELETE',
+        headers:{'Authorization' : localStorage.getItem("Authorization"), 'Content-Type':'application/json'}})
+        .then(resp => resp.json())
+        .then(({usuario}) => {
+            window.location.href = `http://localhost:8080/profile/${usuario}`
         });
 }

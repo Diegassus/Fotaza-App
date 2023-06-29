@@ -48,6 +48,7 @@ const cargarNormal = () => {
   busqueda.addEventListener("submit", (e) => {
     e.preventDefault(); // mostrar todos los post publicos con esa etiqueta
     const tag = document.getElementById("tags").value;
+    if(tag == "") return;
     fetch(`http://localhost:8080/image/tag/${tag}`)
       .then((resp) => resp.json())
       .then((data) => {
@@ -60,6 +61,10 @@ const cargarNormal = () => {
             img.crossOrigin = "anonymous";
           },
         };
+        if(response.length == 0){
+          tabla.innerHTML = "No hay imagenes para cargar!";
+          return;
+        }
         response.forEach((element) => {
           watermark(
             [`http://localhost:8080/uploads/image/${element.src}`],
@@ -98,6 +103,10 @@ const cargarNormal = () => {
           img.crossOrigin = "anonymous";
         },
       };
+      if(response.length == 0){
+        tabla.innerHTML = "No hay imagenes para cargar!";
+        return;
+      }
       response.forEach((element) => {
         watermark(
           [`http://localhost:8080/uploads/image/${element.src}`],
@@ -141,7 +150,7 @@ const cargarBarraUsuario = async (usuario) => {
             <a class="nav-link" href="./post.html">Postear</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link ">Galeria</a>
+            <a class="nav-link " href="./galeria.html">Galeria</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="./categorias.html">Categorias</a>
@@ -174,6 +183,7 @@ const cargarBarraUsuario = async (usuario) => {
   busqueda.addEventListener("submit", (e) => {
     e.preventDefault(); // mostrar todos los post publicos con esa etiqueta
     const tag = document.getElementById("tags").value;
+    if(tag == "") return;
     fetch(`http://localhost:8080/image/tagAuth/${tag}`, {
       headers: {
         Authorization: localStorage.getItem("Authorization"),
@@ -191,6 +201,10 @@ const cargarBarraUsuario = async (usuario) => {
             img.crossOrigin = "anonymous";
           },
         };
+        if(response.length == 0){
+          tabla.innerHTML = "No hay imagenes para cargar!";
+          return;
+        }
         response.forEach((element) => {
           watermark(
             [`http://localhost:8080/uploads/image/${element.src}`],
@@ -252,26 +266,26 @@ const cargarBarraUsuario = async (usuario) => {
                 </div>
                 `;
               tabla.innerHTML += tml;
-              if (likes[element.id] != undefined) {
-                value = likes[element.id];
-                switch (value) {
-                  case 1:
-                    document.getElementById(cont).checked = true;
-                    break;
-                  case 2:
-                    document.getElementById(cont + 1).checked = true;
-                    break;
-                  case 3:
-                    document.getElementById(cont + 2).checked = true;
-                    break;
-                  case 4:
-                    document.getElementById(cont + 3).checked = true;
-                    break;
-                  case 5:
-                    document.getElementById(cont + 4).checked = true;
-                    break;
-                }
-              }
+              // if (likes[element.id] != undefined) {
+              //   value = likes[element.id];
+              //   switch (value) {
+              //     case 1:
+              //       document.getElementById(cont).checked = true;
+              //       break;
+              //     case 2:
+              //       document.getElementById(cont + 1).checked = true;
+              //       break;
+              //     case 3:
+              //       document.getElementById(cont + 2).checked = true;
+              //       break;
+              //     case 4:
+              //       document.getElementById(cont + 3).checked = true;
+              //       break;
+              //     case 5:
+              //       document.getElementById(cont + 4).checked = true;
+              //       break;
+              //   }
+              // }
               cont += 10;
             });
         });
@@ -292,6 +306,10 @@ const cargarBarraUsuario = async (usuario) => {
       };
       let tml;
       let cont = 1;
+      if(response.length == 0){
+        tabla.innerHTML = "No hay imagenes para cargar!";
+        return;
+      }
       response.forEach((element) => {
         watermark(
           [`http://localhost:8080/uploads/image/${element.src}`],
@@ -368,26 +386,26 @@ const cargarBarraUsuario = async (usuario) => {
                 `;
 
             tabla.innerHTML += tml;
-            if (likes[element.id] != undefined) {
-              value = likes[element.id];
-              switch (value) {
-                case 1:
-                  document.getElementById(cont).checked = true;
-                  break;
-                case 2:
-                  document.getElementById(cont + 1).checked = true;
-                  break;
-                case 3:
-                  document.getElementById(cont + 2).checked = true;
-                  break;
-                case 4:
-                  document.getElementById(cont + 3).checked = true;
-                  break;
-                case 5:
-                  document.getElementById(cont + 4).checked = true;
-                  break;
-              }
-            }
+            // if (likes[element.id] != undefined) {
+            //   value = likes[element.id];
+            //   switch (value) {
+            //     case 1:
+            //       document.getElementById(cont).checked = true;
+            //       break;
+            //     case 2:
+            //       document.getElementById(cont + 1).checked = true;
+            //       break;
+            //     case 3:
+            //       document.getElementById(cont + 2).checked = true;
+            //       break;
+            //     case 4:
+            //       document.getElementById(cont + 3).checked = true;
+            //       break;
+            //     case 5:
+            //       document.getElementById(cont + 4).checked = true;
+            //       break;
+            //   }
+            // }
             cont += 10;
           });
         fetch(`http://localhost:8080/comment/${element.id}`)

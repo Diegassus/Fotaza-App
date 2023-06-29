@@ -1,7 +1,7 @@
 const { response } = require("express");
 const { crypt } = require("../helpers");
 const { User, Profile } = require('../models');
-
+const {upload} = require('../helpers');
 
 
 const createUser = async ( req , res = response ) => {
@@ -19,6 +19,8 @@ const createUser = async ( req , res = response ) => {
     const profile = await Profile.create();
     await user.setProfile(profile);
     await profile.setUser(user);
+
+    await Profile.update({imageSrc:'base.png',portrait:'portada.jpg'},{where:{id:profile.id}});
 
     res.json({
         msg:'Usuario creado con exito'

@@ -62,3 +62,11 @@ file.addEventListener('change', () => {
         preview.src = '';
     }
 })
+
+document.getElementById('publicar').addEventListener('click', ()=>{
+    let foto = document.getElementById('src').value;
+    let titulo = document.getElementById('title').value;
+    if(foto.length > 0 && titulo.length > 0){
+        document.getElementById('subir').disabled = false;
+    }
+});

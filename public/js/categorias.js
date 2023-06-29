@@ -25,6 +25,10 @@ fetch('http://localhost:8080/category').then(response => response.json()).then(d
         tabla.innerHTML=''
         let tml;
         let cont = 1;
+        if(response.length == 0){
+            tabla.innerHTML = "No hay imagenes para cargar!";
+            return;
+          }
         const options = {
             init(img) {
               img.crossOrigin = 'anonymous'

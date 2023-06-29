@@ -5,6 +5,7 @@ const {Category,Right,Image, Like} = require('../models');
 const { v4 : uuidv4 } = require('uuid');
 const path = require('path');
 const { Op } = require("sequelize");
+const sequelize = require("../db/config");
 
 
 const postImage = async (req,res = response)=>{ // manejar el post a la DB
@@ -38,7 +39,7 @@ const postImage = async (req,res = response)=>{ // manejar el post a la DB
         });
         // validar la privacidad
         let privacy
-        if(type || RightId == 4 ){
+        if(type || RightId == 1 ){
             privacy = true;
         }else{
             privacy = false;
@@ -108,22 +109,33 @@ const getAll = async (req,res = response)=>{
             ['createdAt', 'DESC']
           ]
     });
-    const like = await Like.findAll({
-        where:{
-            ImageId:response.map(element => element.id),
-            UserId:req.user.id
-        }
-    });
+    // const like = await Like.findAll({
+    //     where:{
+    //         ImageId:response.map(element => element.id),
+    //         UserId:req.user.id
+    //     }
+    // });
 
-    const likes = {}
+    // const likes = {}
 
-    like.forEach(element => {
-        likes[element.ImageId] = element.stars;
-    });
+    // like.forEach(element => {
+    //     likes[element.ImageId] = element.stars;
+    // });
 
     res.json({
-        response,
-        likes
+        response
+    });
+}
+
+const deleteImage = async (req,res = response)=>{
+    const {id} = req.params;
+    await Image.destroy({
+        where:{
+            id:id
+        }
+    });
+    res.json({
+        usuario:req.user.id
     });
 }
 
@@ -216,6 +228,47 @@ const getCatAuth = async (req,res = response)=>{
     });
 }
 
+const portadaImagenes = async (req,res = response)=>{
+    // recuperar todas las imagenes con un promedio de 4 estrellas
+    const images = await Image.findAll({
+        where:{
+            stars: {
+                [Op.gte]: 4
+            }
+        },
+        order: [['createdAt', 'DESC']]
+    });
+
+    // buscar aquellas que tengan mas de 50 valoraciones entre esas recuperadas
+    const masValoradas = [];
+    const usuarios = new Set();
+    for (const image of images) {
+        const query = `
+            SELECT COUNT(*) AS Likes
+            FROM likes
+            WHERE ImageId = ${image.id}
+            `;
+        const result = await sequelize.query(query,{type: sequelize.QueryTypes.SELECT});
+        const likes = result[0].Likes;
+        if(likes >= 2){
+            // filtrar que no sean del mismo usuario
+            if(!usuarios.has(image.UserId)){
+                masValoradas.push(image);
+                usuarios.add(image.UserId);
+            }
+        }
+    }
+
+    // filtrar que sean menores a un año de antiguedad
+    const filtradas = masValoradas.filter(image=>{
+        return image.createdAt > new Date(Date.now() - 1000 * 60 * 60 * 24 * 365);
+    })
+
+    res.json({
+        images: filtradas
+    })
+}
+
 module.exports = {
     postImage,
     getAll,
@@ -223,5 +276,7 @@ module.exports = {
     getUserImage,
     getTagPublic,
     getTagAuth,
-    getCatAuth
+    getCatAuth,
+    deleteImage,
+    portadaImagenes
 }

@@ -1,5 +1,6 @@
 const { v4 : uuidv4 } = require('uuid');
 const path = require('path');
+const fs = require('fs');
 
 const upload = (files,valid = ['png','jpg','jpeg','webp'], folder = '') => {
     
@@ -37,6 +38,21 @@ const upload = (files,valid = ['png','jpg','jpeg','webp'], folder = '') => {
     })
 }
 
+const deleteFile= (file) => {
+    if(file.includes('base')|| file.includes('portada')){
+        return;
+    }
+    try{
+        const borrar = path.join(__dirname,'../uploads',file);
+        fs.unlink(borrar,(e)=>{
+            console.log(e)
+        });
+    }catch(e){
+        console.log(e)
+    }
+}
+
 module.exports = {
-    upload
+    upload,
+    deleteFile
 }

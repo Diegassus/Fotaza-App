@@ -8,11 +8,7 @@ router.get('/:id',[validateInputs],getProfile); // revisar middlewares
 
 router.get('/edit/:id',getEdit);
 
-router.post('/',[jwtValidator,
-    check('lastname','El nombre es obligatorio').not().isEmpty(),
-    check('birth','La fecha es obligatoria').not().isEmpty(),
-    check('likes','La biografia es obligatoria').not().isEmpty()
-    ,validateInputs],updateProfile)  // revisar middlewares 
+router.post('/',[jwtValidator,validateInputs],updateProfile)  // revisar middlewares 
 
 
 
