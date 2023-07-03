@@ -29,37 +29,104 @@ if(!window.location.pathname.includes('edit')){
             watermark([`http://localhost:8080/uploads/image/${element.src}`],options)
             .image(watermark.text.lowerRight(`${element.watermartk}`,'#ffffff', 0.5))
             .then(function (img) {
-                tml = `
-                <div class="mt-4">
-                    <h4>${element.title}</h4>
-                    <span id="eliminar${cont+6}" class="btn btn-danger" onclick="eliminar(${element.id})"></span>
-                    <div class="container publicacion mt-1 mb-2 contFoto">
-                        <img src="${img.src}" class="w-100 h-auto">
+                if(usuario){
+                    tml = `
+                    <div class="mt-4">
+                        <h4>${element.title}</h4>
+                        <span id="eliminar${cont+6}" class="btn btn-danger" onclick="eliminar(${element.id})">Borrar</span>
+                        <div class="container publicacion mt-1 mb-2 contFoto">
+                            <img src="${img.src}" class="w-100 h-auto">
+                        </div>
+                        <div class="valoracion">
+                            <form class="formVal">
+                                <p class="clasificacion">
+                                    <span  id="a${element.id}"  class="promedio">${element.stars}</span>
+                                    <input type="radio" id="${cont}">
+                                    <label onclick="puntuar(5,${element.id})" for="${cont}" class="star"><i class="fa-regular fa-star"></i></label>
+                                    <input type="radio" id="${cont+2}">
+                                    <label onclick="puntuar(4,${element.id})" for="${cont+2}"class="star"><i class="fa-regular fa-star"></i></label>
+                                    <input type="radio" id="${cont+3}">
+                                    <label onclick="puntuar(3,${element.id})" for="${cont+3}"class="star"><i class="fa-regular fa-star"></i></label>
+                                    <input type="radio" id="${cont+4}">
+                                    <label onclick="puntuar(2,${element.id})" for="${cont+4}"class="star"><i class="fa-regular fa-star"></i></label>
+                                    <input type="radio" id="${cont+5}">
+                                    <label class="star" onclick="puntuar(1,${element.id})" for="${cont+5}"><i class="fa-regular fa-star"></i></label>
+                                </p>
+                            </form>
+                        </div>   
+                        
+                        <p>${element.description}</p>
+                        <p>${element.tags}</p>
+    
+                        <hr>
                     </div>
-                    <div class="valoracion">
-                        <form class="formVal">
-                            <p class="clasificacion">
-                                <span  id="a${element.id}"  class="promedio">${element.stars}</span>
-                                <input type="radio" id="${cont}">
-                                <label onclick="puntuar(5,${element.id})" for="${cont}" class="star"><i class="fa-regular fa-star"></i></label>
-                                <input type="radio" id="${cont+2}">
-                                <label onclick="puntuar(4,${element.id})" for="${cont+2}"class="star"><i class="fa-regular fa-star"></i></label>
-                                <input type="radio" id="${cont+3}">
-                                <label onclick="puntuar(3,${element.id})" for="${cont+3}"class="star"><i class="fa-regular fa-star"></i></label>
-                                <input type="radio" id="${cont+4}">
-                                <label onclick="puntuar(2,${element.id})" for="${cont+4}"class="star"><i class="fa-regular fa-star"></i></label>
-                                <input type="radio" id="${cont+5}">
-                                <label class="star" onclick="puntuar(1,${element.id})" for="${cont+5}"><i class="fa-regular fa-star"></i></label>
-                            </p>
-                        </form>
-                    </div>   
-                    
-                    <p>${element.description}</p>
-                    <p>${element.tags}</p>
-
-                    <hr>
-                </div>
-                `;
+                    `;
+                }else{
+                    if(element.RightId == 1){
+                        tml = `
+                        <div class="mt-4">
+                            <h4>${element.title}</h4>
+                            <span id="contactar${cont+6}" class="btn btn-info" onclick="contactar(${element.id})">Contactar Creador</span>
+                            <div class="container publicacion mt-1 mb-2 contFoto">
+                                <img src="${img.src}" class="w-100 h-auto">
+                            </div>
+                            <div class="valoracion">
+                                <form class="formVal">
+                                    <p class="clasificacion">
+                                        <span  id="a${element.id}"  class="promedio">${element.stars}</span>
+                                        <input type="radio" id="${cont}">
+                                        <label onclick="puntuar(5,${element.id})" for="${cont}" class="star"><i class="fa-regular fa-star"></i></label>
+                                        <input type="radio" id="${cont+2}">
+                                        <label onclick="puntuar(4,${element.id})" for="${cont+2}"class="star"><i class="fa-regular fa-star"></i></label>
+                                        <input type="radio" id="${cont+3}">
+                                        <label onclick="puntuar(3,${element.id})" for="${cont+3}"class="star"><i class="fa-regular fa-star"></i></label>
+                                        <input type="radio" id="${cont+4}">
+                                        <label onclick="puntuar(2,${element.id})" for="${cont+4}"class="star"><i class="fa-regular fa-star"></i></label>
+                                        <input type="radio" id="${cont+5}">
+                                        <label class="star" onclick="puntuar(1,${element.id})" for="${cont+5}"><i class="fa-regular fa-star"></i></label>
+                                    </p>
+                                </form>
+                            </div>   
+                            
+                            <p>${element.description}</p>
+                            <p>${element.tags}</p>
+        
+                            <hr>
+                        </div>
+                        `;
+                    }else{
+                        tml = `
+                        <div class="mt-4">
+                            <h4>${element.title}</h4>
+                            <div class="container publicacion mt-1 mb-2 contFoto">
+                                <img src="${img.src}" class="w-100 h-auto">
+                            </div>
+                            <div class="valoracion">
+                                <form class="formVal">
+                                    <p class="clasificacion">
+                                        <span  id="a${element.id}"  class="promedio">${element.stars}</span>
+                                        <input type="radio" id="${cont}">
+                                        <label onclick="puntuar(5,${element.id})" for="${cont}" class="star"><i class="fa-regular fa-star"></i></label>
+                                        <input type="radio" id="${cont+2}">
+                                        <label onclick="puntuar(4,${element.id})" for="${cont+2}"class="star"><i class="fa-regular fa-star"></i></label>
+                                        <input type="radio" id="${cont+3}">
+                                        <label onclick="puntuar(3,${element.id})" for="${cont+3}"class="star"><i class="fa-regular fa-star"></i></label>
+                                        <input type="radio" id="${cont+4}">
+                                        <label onclick="puntuar(2,${element.id})" for="${cont+4}"class="star"><i class="fa-regular fa-star"></i></label>
+                                        <input type="radio" id="${cont+5}">
+                                        <label class="star" onclick="puntuar(1,${element.id})" for="${cont+5}"><i class="fa-regular fa-star"></i></label>
+                                    </p>
+                                </form>
+                            </div>   
+                            
+                            <p>${element.description}</p>
+                            <p>${element.tags}</p>
+        
+                            <hr>
+                        </div>
+                        `;
+                    }
+                }
                 tabla.innerHTML+=(tml);
                 // if(likes[element.id] != undefined){
                 //     value = likes[element.id]
@@ -154,4 +221,13 @@ const eliminar = (idFoto)=>{
         .then(({usuario}) => {
             window.location.href = `http://localhost:8080/profile/${usuario}`
         });
+}
+
+const socket = io();
+
+const contactar = (postId)=>{
+    socket.emit("contactar",{
+        image:postId,
+        token:localStorage.getItem('Authorization')
+    });
 }

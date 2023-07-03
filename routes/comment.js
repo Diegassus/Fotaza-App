@@ -1,7 +1,12 @@
 const {Router, response} = require('express');
-const { getComments } = require('../controllers/comment');
+const { getComments, deleteComment,getComment } = require('../controllers/comment');
+const { jwtValidator } = require('../middlewares');
 const router = Router();
 
-router.get('/:id', getComments);
+router.get('/:id', [jwtValidator],getComments);
+
+router.get('/:id/live', [jwtValidator],getComment);
+
+router.delete('/:id', deleteComment);
 
 module.exports = router

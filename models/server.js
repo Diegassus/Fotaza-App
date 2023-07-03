@@ -21,7 +21,8 @@ class Server {
             category:'/category',
             rights:'/rights',
             stars:'/stars',
-            comments:'/comment'
+            comments:'/comment',
+            notificaion:'/notification'
         } 
 
         // conectar a la base de datos con sequelize
@@ -76,6 +77,7 @@ class Server {
         this.app.use(this.paths.rights,require('../routes/rights'));
         this.app.use(this.paths.stars,require('../routes/stars'));
         this.app.use(this.paths.comments,require('../routes/comment'));
+        this.app.use(this.paths.notificaion,require('../routes/notification'));
     }
 
     async connectDB(){

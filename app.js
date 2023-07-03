@@ -5,8 +5,9 @@ const server = new Server();
 
 server.listen(); 
 /*
-Toda imagen con copyrigth debe disponer de un mecanismo donde los interesados puedan
-contactar y enviar un mensaje al autor respecto de su interés por adquirir la imagen.
+cuando el usuario haga click en la campana, mostrar las notificaciones 
+
+Si hace click en la cruz, se actualiza la notificacion para que aparezca como vista en la db.
 */
 
 // Token del amigo Allan

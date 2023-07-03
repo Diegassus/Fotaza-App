@@ -80,3 +80,23 @@ a{
 .fotito > img{
   width: 15%;
 }
+
+.comentario{
+  background-color: #363331;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  box-sizing: border-box;
+}
+
+.comentario  >.row > .contNombre{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 15px;
+}
+
+.comentario  >.row > .contNombre > p{
+  padding: 0;
+  margin: 0;
+}

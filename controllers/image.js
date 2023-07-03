@@ -250,7 +250,7 @@ const portadaImagenes = async (req,res = response)=>{
             `;
         const result = await sequelize.query(query,{type: sequelize.QueryTypes.SELECT});
         const likes = result[0].Likes;
-        if(likes >= 2){
+        if(likes >= 2){ // se toma 2 likes para demostracion
             // filtrar que no sean del mismo usuario
             if(!usuarios.has(image.UserId)){
                 masValoradas.push(image);

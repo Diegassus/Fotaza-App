@@ -48,7 +48,7 @@ const cargarNormal = () => {
   busqueda.addEventListener("submit", (e) => {
     e.preventDefault(); // mostrar todos los post publicos con esa etiqueta
     const tag = document.getElementById("tags").value;
-    if(tag == "") return;
+    if (tag == "") return;
     fetch(`http://localhost:8080/image/tag/${tag}`)
       .then((resp) => resp.json())
       .then((data) => {
@@ -61,7 +61,7 @@ const cargarNormal = () => {
             img.crossOrigin = "anonymous";
           },
         };
-        if(response.length == 0){
+        if (response.length == 0) {
           tabla.innerHTML = "No hay imagenes para cargar!";
           return;
         }
@@ -103,7 +103,7 @@ const cargarNormal = () => {
           img.crossOrigin = "anonymous";
         },
       };
-      if(response.length == 0){
+      if (response.length == 0) {
         tabla.innerHTML = "No hay imagenes para cargar!";
         return;
       }
@@ -155,7 +155,9 @@ const cargarBarraUsuario = async (usuario) => {
         <li class="nav-item">
             <a class="nav-link" href="./categorias.html">Categorias</a>
         </li>
-
+        <li class="nav-item">
+          <div id="notification" class="notification"></div>
+        </li>
         </ul>
           <div class="dropdown" id="drop">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -174,6 +176,62 @@ const cargarBarraUsuario = async (usuario) => {
   // cerrar <button id="cerrar" class="dropdown-item">Cerrar Sesion</button>
 
   ulMenu.innerHTML = html;
+
+  const $bell = document.getElementById("notification");
+  // realizar el socket tanto aca como en notificacion.js
+
+  let contactos = [];
+  let imagen = [];
+  fetch("http://localhost:8080/notification", {
+    headers: {
+      Authorization: localStorage.getItem("Authorization"),
+    },
+  })
+    .then((resp) => resp.json())
+    .then(({ notificaciones, imagenes }) => {
+      if (imagenes.length > 0) {
+        $bell.setAttribute("data-count", imagenes.length);
+        $bell.classList.add("show-count");
+        $bell.classList.add("notify");
+        notificaciones.forEach((element) => {
+          contactos.push(element);
+        });
+        imagenes.forEach((element) => {
+          imagen.push(element);
+        });
+      }
+    });
+
+  setTimeout(() => {
+    fetch("http://localhost:8080/notification", {
+      headers: {
+        Authorization: localStorage.getItem("Authorization"),
+      },
+    })
+      .then((resp) => resp.json())
+      .then(({ notificaciones, imagenes }) => {
+        if (imagenes.length > 0) {
+          $bell.setAttribute("data-count", imagenes.length);
+          $bell.classList.add("show-count");
+          $bell.classList.add("notify");
+          notificaciones.forEach((element) => {
+            contactos.push(element);
+          });
+          imagenes.forEach((element) => {
+            imagen.push(element);
+          });
+        }
+      });
+  }, 2 * 60 * 1000);
+
+  $bell.addEventListener("animationend", function (event) {
+    $bell.classList.remove("notify");
+  });
+
+  $bell.addEventListener("click", () => {
+    console.log('hola')
+  })
+
   boton = document.getElementById("cerrar");
   boton.addEventListener("click", () => {
     localStorage.removeItem("Authorization");
@@ -183,7 +241,7 @@ const cargarBarraUsuario = async (usuario) => {
   busqueda.addEventListener("submit", (e) => {
     e.preventDefault(); // mostrar todos los post publicos con esa etiqueta
     const tag = document.getElementById("tags").value;
-    if(tag == "") return;
+    if (tag == "") return;
     fetch(`http://localhost:8080/image/tagAuth/${tag}`, {
       headers: {
         Authorization: localStorage.getItem("Authorization"),
@@ -201,7 +259,7 @@ const cargarBarraUsuario = async (usuario) => {
             img.crossOrigin = "anonymous";
           },
         };
-        if(response.length == 0){
+        if (response.length == 0) {
           tabla.innerHTML = "No hay imagenes para cargar!";
           return;
         }
@@ -306,7 +364,7 @@ const cargarBarraUsuario = async (usuario) => {
       };
       let tml;
       let cont = 1;
-      if(response.length == 0){
+      if (response.length == 0) {
         tabla.innerHTML = "No hay imagenes para cargar!";
         return;
       }
@@ -408,21 +466,50 @@ const cargarBarraUsuario = async (usuario) => {
             // }
             cont += 10;
           });
-        fetch(`http://localhost:8080/comment/${element.id}`)
+        fetch(`http://localhost:8080/comment/${element.id}`, {
+          headers: {
+            Authorization: localStorage.getItem("Authorization"),
+          },
+        })
           .then((resp) => resp.json())
           .then((data) => {
             data.forEach((comentario) => {
-              document.getElementById(`comentarios${element.id}`).innerHTML += `
-                    <div class="comentario container">
+              if (comentario.derecho) {
+                document.getElementById(
+                  `comentarios${element.id}`
+                ).innerHTML += `
+                <div class="comentario container"  id="${comentario.id}">
             <div class="row">
                 <div class="col-md-4 contNombre">
                     <p>${comentario.username}</p>
-                </div>
-                <div class="col-md-6">
+                    <span onclick="eliminarComentario(${comentario.id})">X</span>
+                  </div>
+                  <hr>
+                    <div class="col-md-6">
                     <p>${comentario.description}</p>
+                    <p>${comentario.createdAt}</p>
                 </div>
             </div>
-        </div>`;
+        </div>
+        `;
+              } else {
+                document.getElementById(
+                  `comentarios${element.id}`
+                ).innerHTML += `
+                <div class="comentario container" id="${comentario.id}">
+            <div class="row">
+                <div class="col-md-4 contNombre">
+                    <p>${comentario.username}</p>
+                  </div>
+                  <hr>
+                    <div class="col-md-6">
+                    <p>${comentario.description}</p>
+                    <p>${comentario.createdAt}</p>
+                </div>
+            </div>
+        </div>
+        `;
+              }
             });
           });
       });
@@ -463,20 +550,57 @@ const conectarSocket = async () => {
   });
 
   socket.on("comentario", (data) => {
-    console.log(data);
-    const { comment, username } = data;
-    const { ImageId, description } = comment;
-    document.getElementById("comentarios" + ImageId).innerHTML += `
-        <div class="comentario container">
-            <div class="row">
-                <div class="col-md-4 contNombre">
-                    <p>${username}</p>
+    const { comment, username,imagen} = data;
+    fetch(`http://localhost:8080/comment/${comment.id}/live`, {
+          headers: {
+            Authorization: localStorage.getItem("Authorization"),
+          },
+        })
+          .then((resp) => resp.json())
+          .then((data) =>{
+            if(data.derecho){
+              document.getElementById("comentarios" +imagen).innerHTML += `
+              <div class="comentario container" id="${data.id}">
+              <div class="row">
+                  <div class="col-md-4 contNombre">
+                      <p>${username}</p>
+                      <span onclick="eliminarComentario(${data.id})">X</span>
+                    </div>
+                    <hr>
+                      <div class="col-md-6">
+                      <p>${data.description}</p>
+                      <p>${data.createdAt}</p>
+                  </div>
+              </div>
+          </div>
+          `;
+            }else{
+              document.getElementById(
+                `comentarios${imagen}`
+              ).innerHTML += `
+              <div class="comentario container"  id="${data.id}">
+          <div class="row">
+              <div class="col-md-4 contNombre">
+                  <p>${username}</p>
                 </div>
-                <div class="col-md-6">
-                    <p>${description}</p>
-                </div>
-            </div>
-        </div>
-        `;
+                <hr>
+                  <div class="col-md-6">
+                  <p>${data.description}</p>
+                  <p>${data.createdAt}</p>
+              </div>
+          </div>
+      </div>
+      `;
+            }
+          })
   });
 };
+
+function eliminarComentario(comentarioId){
+  console.log(comentarioId);
+  fetch(`http://localhost:8080/comment/${comentarioId}`, {
+    method: "DELETE"
+  }).then((resp) => resp.json()).then((data) => {
+    document.getElementById(`${comentarioId}`).outerHTML = "";
+  });
+}
