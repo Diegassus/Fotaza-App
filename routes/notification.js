@@ -1,6 +1,7 @@
-const {Router} = require('express');
+const {Router, response} = require('express');
 const Contact = require('../models/contact');
 const Image = require('../models/image')
+const User = require('../models/user')
 const { jwtValidator } = require('../middlewares');
 
 const router = Router();
@@ -26,5 +27,21 @@ router.get('/',[jwtValidator], async (req, res)=> {
         imagenes: images
     });
 });
+
+router.get('/:idUser/:idFoto',async(req,res=response)=>{
+    const user = await User.findByPk(req.params.idUser);
+    const image = await Image.findByPk(req.params.idFoto);
+    res.json({
+        imagen:image.title,
+        usuario:user.username
+    })
+})
+
+router.post('/:idUser/:idFoto',async(req,res=response)=>{
+    await Contact.update({status:true},{where:{UserId:req.params.idUser,ImageId:req.params.idFoto}});
+    res.json({
+        msg:"Contacto eliminado"
+    })
+})
 
 module.exports = router;

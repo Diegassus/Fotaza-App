@@ -156,7 +156,9 @@ const cargarBarraUsuario = async (usuario) => {
             <a class="nav-link" href="./categorias.html">Categorias</a>
         </li>
         <li class="nav-item">
-          <div id="notification" class="notification"></div>
+          <div id="notification" class="notification dropdown"><div class="dropdown-content" id="drop">
+          
+          </div></div>
         </li>
         </ul>
           <div class="dropdown" id="drop">
@@ -227,10 +229,39 @@ const cargarBarraUsuario = async (usuario) => {
   $bell.addEventListener("animationend", function (event) {
     $bell.classList.remove("notify");
   });
-
+  let mostrar = false;
   $bell.addEventListener("click", () => {
-    console.log('hola')
-  })
+    let n = 1;
+    if (mostrar) {
+      document.getElementById("drop").style.display = "none";
+      document.getElementById("drop").innerHTML = "";
+    } else {
+      contactos.forEach((element) => {
+        document.getElementById("drop").style.display = "block";
+        fetch(
+          `http://localhost:8080/notification/${element.UserId}/${element.ImageId}`
+        )
+          .then((resp) => resp.json())
+          .then(({ imagen, usuario }) => {
+            document.getElementById("drop").innerHTML += `
+          <div class="notif-cont" id="n${n}">
+            <div class="notif-head"><span>Alguien esta interesado!</span></div>
+            <div class="notif-body">
+              <p>${usuario} esta interesado en <b>${imagen}</b></p>
+            </div>
+          </div>
+          `;
+          fetch(`http://localhost:8080/notification/${element.UserId}/${element.ImageId}`, {
+            method: "post",
+          }).then((resp) => resp.json()).then((data) => {
+            console.log(data);
+          });
+          });
+        n++;
+      });
+    }
+    mostrar = !mostrar;
+  });
 
   boton = document.getElementById("cerrar");
   boton.addEventListener("click", () => {
@@ -550,16 +581,16 @@ const conectarSocket = async () => {
   });
 
   socket.on("comentario", (data) => {
-    const { comment, username,imagen} = data;
+    const { comment, username, imagen } = data;
     fetch(`http://localhost:8080/comment/${comment.id}/live`, {
-          headers: {
-            Authorization: localStorage.getItem("Authorization"),
-          },
-        })
-          .then((resp) => resp.json())
-          .then((data) =>{
-            if(data.derecho){
-              document.getElementById("comentarios" +imagen).innerHTML += `
+      headers: {
+        Authorization: localStorage.getItem("Authorization"),
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data.derecho) {
+          document.getElementById("comentarios" + imagen).innerHTML += `
               <div class="comentario container" id="${data.id}">
               <div class="row">
                   <div class="col-md-4 contNombre">
@@ -574,10 +605,8 @@ const conectarSocket = async () => {
               </div>
           </div>
           `;
-            }else{
-              document.getElementById(
-                `comentarios${imagen}`
-              ).innerHTML += `
+        } else {
+          document.getElementById(`comentarios${imagen}`).innerHTML += `
               <div class="comentario container"  id="${data.id}">
           <div class="row">
               <div class="col-md-4 contNombre">
@@ -591,16 +620,18 @@ const conectarSocket = async () => {
           </div>
       </div>
       `;
-            }
-          })
+        }
+      });
   });
 };
 
-function eliminarComentario(comentarioId){
+function eliminarComentario(comentarioId) {
   console.log(comentarioId);
   fetch(`http://localhost:8080/comment/${comentarioId}`, {
-    method: "DELETE"
-  }).then((resp) => resp.json()).then((data) => {
-    document.getElementById(`${comentarioId}`).outerHTML = "";
-  });
+    method: "DELETE",
+  })
+    .then((resp) => resp.json())
+    .then((data) => {
+      document.getElementById(`${comentarioId}`).outerHTML = "";
+    });
 }

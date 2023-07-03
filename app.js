@@ -4,11 +4,6 @@ const {Server} = require('./models');
 const server = new Server();
 
 server.listen(); 
-/*
-cuando el usuario haga click en la campana, mostrar las notificaciones 
-
-Si hace click en la cruz, se actualiza la notificacion para que aparezca como vista en la db.
-*/
 
 // Token del amigo Allan
 //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibmluamFsb3ZlcjI0OUBnbWFpbC5jb20iLCJJZCI6IjEiLCJleHAiOjE2ODM4NTg4NTIsImlzcyI6ImlubW9iaWxpYXJpYV9hcGkiLCJhdWQiOiJtb2JpbGVBUFAifQ.fiR4v7pi4_vXJ4PHFGUQcJBk58y6zTklJpHyfkIr4dw

@@ -48,6 +48,36 @@ $bell.addEventListener("animationend", function (event) {
   $bell.classList.remove("notify");
 });
 
-$bell.addEventListener("click", () => {
-  console.log('hola')
-})
+let mostrar = false;
+  $bell.addEventListener("click", () => {
+    let n = 1;
+    if (mostrar) {
+      document.getElementById("drop").style.display = "none";
+      document.getElementById("drop").innerHTML = "";
+    } else {
+      contactos.forEach((element) => {
+        document.getElementById("drop").style.display = "block";
+        fetch(
+          `http://localhost:8080/notification/${element.UserId}/${element.ImageId}`
+        )
+          .then((resp) => resp.json())
+          .then(({ imagen, usuario }) => {
+            document.getElementById("drop").innerHTML += `
+          <div class="notif-cont" id="n${n}">
+            <div class="notif-head"><span>Alguien esta interesado!</span></div>
+            <div class="notif-body">
+              <p>${usuario} esta interesado en <b>${imagen}</b></p>
+            </div>
+          </div>
+          `;
+          fetch(`http://localhost:8080/notification/${element.UserId}/${element.ImageId}`, {
+            method: "post",
+          }).then((resp) => resp.json()).then((data) => {
+            console.log(data);
+          });
+          });
+        n++;
+      });
+    }
+    mostrar = !mostrar;
+  });

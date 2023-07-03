@@ -55,3 +55,38 @@
     75% {transform: rotate(5deg)}
     100% {transform: rotate(0);}  
   }
+
+  
+.dropdown{
+  position: relative;
+  display: inline-block
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 300px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.notif-cont{
+  background-color: #363331;
+  padding: 2px 5px;
+  margin: 2px;
+  border-radius: 3px;
+}
+
+.notif-head{
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.borrarNotif{
+  background-color: #ec7336;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
